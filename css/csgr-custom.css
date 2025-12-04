@@ -1829,81 +1829,111 @@ html {
   }
 }
 
-/* ===== MENU MOBILE - NAVBAR ===== */
+/* ===== MENU MOBILE - BURGER + SIDEBAR ===== */
+
+/* Bouton burger - caché sur desktop */
+.burger-btn {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1000;
+  font-size: 28px;
+  padding: 8px 12px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.burger-btn .mdi {
+  color: #333;
+}
+
+/* Sidebar mobile - cachée par défaut */
+.mobile-sidebar {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 260px;
+  height: 100vh;
+  background: #1e293b;
+  z-index: 2000;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+}
+
+.mobile-sidebar.open {
+  left: 0;
+}
+
+.mobile-sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #334155;
+}
+
+.close-sidebar {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.mobile-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+}
+
+.mobile-sidebar-nav a {
+  color: #cbd5e1;
+  padding: 15px 25px;
+  text-decoration: none;
+  font-size: 16px;
+  border-bottom: 1px solid #334155;
+  transition: all 0.2s;
+}
+
+.mobile-sidebar-nav a:hover {
+  background: #334155;
+  color: #fff;
+}
+
+/* Overlay sombre */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1500;
+}
+
+.sidebar-overlay.open {
+  display: block;
+}
+
+/* Responsive mobile */
 @media (max-width: 991px) {
-  /* Bouton hamburger */
-  .navbar-toggler:not(.close-button) {
-    display: flex !important;
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background: #fff;
+  .burger-btn {
+    display: block;
   }
   
-  .navbar-toggler .mdi-menu {
-    font-size: 24px;
-    color: #333;
+  /* Cacher la navbar Bootstrap sur mobile */
+  .navbar-collapse {
+    display: none !important;
   }
   
-  /* Menu sidebar */
-  #navbarSupportedContent {
-    position: fixed !important;
-    top: 0 !important;
-    left: -280px !important;
-    width: 270px !important;
-    height: 100% !important;
-    background: #fff !important;
-    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
-    transition: left 0.3s ease-in-out !important;
-    z-index: 9999 !important;
-    overflow-y: auto;
-    padding: 15px 0;
-  }
-  
-  #navbarSupportedContent.show {
-    left: 0 !important;
-  }
-  
-  /* Liens du menu */
-  #navbarSupportedContent .navbar-nav {
-    flex-direction: column;
-    width: 100%;
-    padding: 10px;
-  }
-  
-  #navbarSupportedContent .nav-item {
-    width: 100%;
-    border-bottom: 1px solid #eee;
-  }
-  
-  #navbarSupportedContent .nav-link {
-    padding: 12px 15px;
-    color: #333;
-    font-size: 15px;
-  }
-  
-  /* Bouton fermer X */
-  .close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    z-index: 10;
-  }
-  
-  /* Overlay sombre */
-  body.sidebar-open::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 9998;
+  /* Ajuster le header */
+  .navbar-brand-wrapper {
+    justify-content: center;
   }
 }
 

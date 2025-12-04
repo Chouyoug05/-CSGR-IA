@@ -33,25 +33,40 @@
   <link rel="stylesheet" href="css/csgr-custom.css">
 </head>
 <body id="body" data-spy="scroll" data-target=".navbar" data-offset="100">
+  <!-- Bouton Burger Mobile -->
+  <button class="burger-btn" id="burgerBtn">
+    <span class="mdi mdi-menu"></span>
+  </button>
+
+  <!-- Sidebar Mobile -->
+  <div class="mobile-sidebar" id="mobileSidebar">
+    <div class="mobile-sidebar-header">
+      <img src="images/csgr-ia-logo.png" alt="CSGR-IA" style="max-height: 40px;">
+      <button class="close-sidebar" id="closeSidebar">
+        <span class="mdi mdi-close"></span>
+      </button>
+    </div>
+    <nav class="mobile-sidebar-nav">
+      <a href="#header-section">Accueil</a>
+      <a href="#programmes-section">Programmes</a>
+      <a href="#actualites-section">Actualités</a>
+      <a href="#feedback-section">Témoignages</a>
+      <a href="#" data-toggle="modal" data-target="#contactModal">Contact</a>
+    </nav>
+  </div>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
   <header id="header-section">
     <nav class="navbar navbar-expand-lg pl-3 pl-sm-0" id="navbar">
     <div class="container">
       <div class="navbar-brand-wrapper d-flex w-100">
           <a href="index.html"><img src="images/csgr-ia-logo.png" alt="CSGR-IA Logo"></a>
-        <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler ml-auto d-lg-none d-none" type="button">
           <span class="mdi mdi-menu navbar-toggler-icon"></span>
         </button> 
       </div>
       <div class="collapse navbar-collapse navbar-menu-wrapper" id="navbarSupportedContent">
         <ul class="navbar-nav align-items-lg-center align-items-start ml-auto">
-          <li class="d-flex align-items-center justify-content-between pl-4 pl-lg-0">
-            <div class="navbar-collapse-logo">
-                <img src="images/csgr-ia-logo.png" alt="CSGR-IA Logo">
-            </div>
-            <button class="navbar-toggler close-button" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="mdi mdi-close navbar-toggler-icon pl-5"></span>
-            </button>
-          </li>
           <li class="nav-item">
               <a class="nav-link" href="#header-section">Accueil</a>
           </li>
@@ -290,6 +305,38 @@
         }
         console.log('✅ Cooldown popup réinitialisé après inscription');
       }
+      
+      // ===== MENU MOBILE BURGER =====
+      const burgerBtn = document.getElementById('burgerBtn');
+      const sidebar = document.getElementById('mobileSidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      const closeSidebar = document.getElementById('closeSidebar');
+      
+      // Ouvrir le menu
+      burgerBtn.addEventListener('click', function() {
+        sidebar.classList.add('open');
+        overlay.classList.add('open');
+      });
+      
+      // Fermer le menu avec X
+      closeSidebar.addEventListener('click', function() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('open');
+      });
+      
+      // Fermer le menu en cliquant sur l'overlay
+      overlay.addEventListener('click', function() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('open');
+      });
+      
+      // Fermer le menu en cliquant sur un lien
+      document.querySelectorAll('.mobile-sidebar-nav a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('open');
+        });
+      });
     });
   </script>
 </body>
