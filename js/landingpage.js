@@ -94,43 +94,62 @@ if (typeof AOS !== 'undefined') {
 
 //SIDEBAR-OPEN - Menu mobile
 $(document).ready(function() {
-  // Gérer l'ouverture/fermeture du menu mobile
-  $('#navbarSupportedContent').on('hidden.bs.collapse', function () {
-    $("body").removeClass("sidebar-open");
-  });
-
-  $('#navbarSupportedContent').on('shown.bs.collapse', function () {
-    $("body").addClass("sidebar-open");
-  });
+  var $navbar = $('#navbarSupportedContent');
+  var $body = $('body');
+  var $togglers = $('.navbar-toggler');
   
-  // S'assurer que le bouton toggle fonctionne
-  $('.navbar-toggler').on('click', function(e) {
+  // Fonction pour ouvrir le menu
+  function openMenu() {
+    $navbar.addClass('show');
+    $body.addClass('sidebar-open');
+    console.log('Menu ouvert');
+  }
+  
+  // Fonction pour fermer le menu
+  function closeMenu() {
+    $navbar.removeClass('show');
+    $body.removeClass('sidebar-open');
+    console.log('Menu fermé');
+  }
+  
+  // Clic sur le bouton hamburger (ouvrir)
+  $togglers.first().on('click', function(e) {
     e.preventDefault();
-    var target = $(this).data('target');
-    if (target) {
-      var $target = $(target);
-      if ($target.hasClass('show')) {
-        $target.removeClass('show');
-        $("body").removeClass("sidebar-open");
-      } else {
-        $target.addClass('show');
-        $("body").addClass("sidebar-open");
-      }
+    e.stopPropagation();
+    if ($navbar.hasClass('show')) {
+      closeMenu();
+    } else {
+      openMenu();
     }
   });
   
-  // Fermer le menu quand on clique sur un lien (mobile)
-  $('#navbarSupportedContent .nav-link').on('click', function() {
+  // Clic sur le bouton fermer (X)
+  $('.close-button').on('click', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    closeMenu();
+  });
+  
+  // Fermer le menu quand on clique sur un lien
+  $navbar.find('.nav-link').on('click', function() {
     if (window.innerWidth < 992) {
-      $('#navbarSupportedContent').removeClass('show');
-      $("body").removeClass("sidebar-open");
+      closeMenu();
+    }
+  });
+  
+  // Fermer si on clique en dehors du menu
+  $(document).on('click', function(e) {
+    if ($navbar.hasClass('show')) {
+      if (!$(e.target).closest('#navbarSupportedContent, .navbar-toggler').length) {
+        closeMenu();
+      }
     }
   });
 });
 
+// Fermer le menu si on redimensionne vers desktop
 window.onresize = function() {
-  var w = window.innerWidth;
-  if(w >= 992) {
+  if (window.innerWidth >= 992) {
     $('body').removeClass('sidebar-open');
     $('#navbarSupportedContent').removeClass('show');
   }

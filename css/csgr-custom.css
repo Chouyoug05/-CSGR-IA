@@ -1836,102 +1836,109 @@ html {
     display: flex !important;
     align-items: center;
     justify-content: center;
-    padding: 8px 12px;
-    border: 1px solid rgba(0,0,0,0.1);
-    border-radius: 6px;
-    background: transparent;
-    z-index: 1001;
+    padding: 10px 14px !important;
+    border: 2px solid #0061f2 !important;
+    border-radius: 8px !important;
+    background: white !important;
+    z-index: 1050 !important;
+    cursor: pointer !important;
   }
   
   .navbar-toggler .mdi {
-    font-size: 24px;
-    color: #333;
+    font-size: 26px !important;
+    color: #0061f2 !important;
+    pointer-events: none;
   }
   
   /* Menu déroulant mobile */
+  #navbarSupportedContent,
   .navbar-collapse {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 280px;
-    height: 100vh;
-    background: white;
-    box-shadow: 2px 0 15px rgba(0,0,0,0.15);
-    transition: left 0.3s ease;
-    z-index: 1000;
-    overflow-y: auto;
-    padding-top: 20px;
+    position: fixed !important;
+    top: 0 !important;
+    left: -300px !important;
+    width: 280px !important;
+    height: 100vh !important;
+    background: white !important;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.2) !important;
+    transition: left 0.3s ease !important;
+    z-index: 1040 !important;
+    overflow-y: auto !important;
+    padding-top: 20px !important;
+    display: block !important;
   }
   
+  #navbarSupportedContent.show,
   .navbar-collapse.show {
-    left: 0;
+    left: 0 !important;
   }
   
   /* Liste des liens */
   .navbar-collapse .navbar-nav {
-    flex-direction: column;
-    padding: 20px;
-    width: 100%;
+    flex-direction: column !important;
+    padding: 20px !important;
+    width: 100% !important;
   }
   
   .navbar-collapse .nav-item {
-    width: 100%;
-    margin: 0;
-    border-bottom: 1px solid #f0f0f0;
+    width: 100% !important;
+    margin: 0 !important;
+    border-bottom: 1px solid #f0f0f0 !important;
   }
   
   .navbar-collapse .nav-link {
-    display: block;
-    padding: 15px 10px;
-    color: #333;
-    font-size: 16px;
-    font-weight: 500;
+    display: block !important;
+    padding: 15px 10px !important;
+    color: #333 !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
   }
   
   .navbar-collapse .nav-link:hover {
-    background: #f8f9fa;
-    color: #0061f2;
+    background: #f8f9fa !important;
+    color: #0061f2 !important;
   }
   
   /* Bouton fermer dans le menu */
   .navbar-collapse .close-button {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: none;
-    border: none;
-    font-size: 28px;
-    color: #333;
-    z-index: 10;
+    position: absolute !important;
+    top: 15px !important;
+    right: 15px !important;
+    background: none !important;
+    border: none !important;
+    font-size: 28px !important;
+    color: #333 !important;
+    z-index: 10 !important;
+    display: block !important;
+    cursor: pointer !important;
   }
   
   /* Logo dans le menu mobile */
   .navbar-collapse-logo {
-    padding: 10px 20px;
-    border-bottom: 1px solid #eee;
-    margin-bottom: 10px;
+    padding: 10px 20px !important;
+    border-bottom: 1px solid #eee !important;
+    margin-bottom: 10px !important;
   }
   
   /* Overlay quand menu ouvert */
   body.sidebar-open::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.4);
-    z-index: 999;
+    content: '' !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: rgba(0,0,0,0.5) !important;
+    z-index: 1030 !important;
   }
   
   /* Bouton contact dans menu mobile */
   .navbar-collapse .btn-contact-us {
-    padding: 15px 10px;
-    width: 100%;
+    padding: 15px 10px !important;
+    width: 100% !important;
   }
   
   .navbar-collapse .btn-contact-us .btn {
-    width: 100%;
+    width: 100% !important;
   }
 }
 
