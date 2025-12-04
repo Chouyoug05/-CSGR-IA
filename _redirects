@@ -1,0 +1,4 @@
+# Netlify redirects
+# Les pages HTML sont servies directement
+/*.html  /:splat.html  200
+
