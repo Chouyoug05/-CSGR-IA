@@ -209,6 +209,54 @@ const CSGRData = {
   deletePartenaire: async function(id) {
     await this.ensureFirebase();
     return await window.CSGRFirebase.deletePartenaire(id);
+  },
+
+  // Sponsors
+  getSponsors: async function() {
+    await this.ensureFirebase();
+    return await window.CSGRFirebase.getSponsors();
+  },
+  
+  saveSponsor: async function(sponsor) {
+    await this.ensureFirebase();
+    return await window.CSGRFirebase.saveSponsor(sponsor);
+  },
+  
+  deleteSponsor: async function(id) {
+    await this.ensureFirebase();
+    return await window.CSGRFirebase.deleteSponsor(id);
+  },
+
+  // Sponsors
+  getSponsors: async function() {
+    await this.ensureFirebase();
+    return await window.CSGRFirebase.getSponsors();
+  },
+  
+  saveSponsor: async function(sponsor) {
+    await this.ensureFirebase();
+    return await window.CSGRFirebase.saveSponsor(sponsor);
+  },
+  
+  deleteSponsor: async function(id) {
+    await this.ensureFirebase();
+    return await window.CSGRFirebase.deleteSponsor(id);
+  },
+
+  // Sponsors
+  getSponsors: async function() {
+    await this.ensureFirebase();
+    return await window.CSGRFirebase.getSponsors();
+  },
+  
+  saveSponsor: async function(sponsor) {
+    await this.ensureFirebase();
+    return await window.CSGRFirebase.saveSponsor(sponsor);
+  },
+  
+  deleteSponsor: async function(id) {
+    await this.ensureFirebase();
+    return await window.CSGRFirebase.deleteSponsor(id);
   }
 };
 

@@ -23,7 +23,8 @@ $(document).ready(async function() {
     loadData(loadTemoignages, 'témoignages'),
     loadData(loadCTA, 'CTA'),
     loadData(loadContact, 'contact'),
-    loadData(loadPartenaires, 'partenaires')
+    loadData(loadPartenaires, 'partenaires'),
+    loadData(loadSponsors, 'sponsors')
   ]);
   
   // Gérer les filtres de programmes
@@ -634,4 +635,100 @@ async function loadPartenaires() {
 
 // Exposer la fonction globalement
 window.loadPartenaires = loadPartenaires;
+
+// ===== CHARGEMENT DES SPONSORS =====
+async function loadSponsors() {
+  console.log('⭐ [SPONSORS] Chargement des sponsors...');
+  const container = document.getElementById('sponsors-container');
+  const section = document.getElementById('sponsors-section');
+  
+  if (!container) {
+    console.log('⚠️ [SPONSORS] Container sponsors non trouvé');
+    return;
+  }
+  
+  try {
+    const sponsors = await CSGRData.getSponsors();
+    console.log('⭐ [SPONSORS] Données reçues:', sponsors);
+    
+    if (!sponsors || sponsors.length === 0) {
+      console.log('⚠️ [SPONSORS] Aucun sponsor à afficher');
+      if (section) section.style.display = 'none';
+      return;
+    }
+    
+    // Afficher la section
+    if (section) section.style.display = 'block';
+    
+    // Générer le HTML des sponsors
+    const html = sponsors.map(s => `
+      <div class="col-6 col-md-4 col-lg-2 mb-4 text-center">
+        <a href="${s.site || '#'}" target="${s.site ? '_blank' : '_self'}" class="sponsor-link" title="${s.nom}">
+          <div class="sponsor-card">
+            <img src="${s.logo}" alt="${s.nom}" class="img-fluid sponsor-logo">
+            <p class="sponsor-nom mt-2 mb-0">${s.nom}</p>
+          </div>
+        </a>
+      </div>
+    `).join('');
+    
+    container.innerHTML = html;
+    console.log('✅ [SPONSORS] ' + sponsors.length + ' sponsors affichés');
+    
+  } catch (error) {
+    console.error('❌ [SPONSORS] Erreur lors du chargement:', error);
+    if (section) section.style.display = 'none';
+  }
+}
+
+// Exposer la fonction globalement
+window.loadSponsors = loadSponsors;
+
+// ===== CHARGEMENT DES SPONSORS =====
+async function loadSponsors() {
+  console.log('⭐ [SPONSORS] Chargement des sponsors...');
+  const container = document.getElementById('sponsors-container');
+  const section = document.getElementById('sponsors-section');
+  
+  if (!container) {
+    console.log('⚠️ [SPONSORS] Container sponsors non trouvé');
+    return;
+  }
+  
+  try {
+    const sponsors = await CSGRData.getSponsors();
+    console.log('⭐ [SPONSORS] Données reçues:', sponsors);
+    
+    if (!sponsors || sponsors.length === 0) {
+      console.log('⚠️ [SPONSORS] Aucun sponsor à afficher');
+      if (section) section.style.display = 'none';
+      return;
+    }
+    
+    // Afficher la section
+    if (section) section.style.display = 'block';
+    
+    // Générer le HTML des sponsors
+    const html = sponsors.map(s => `
+      <div class="col-6 col-md-4 col-lg-2 mb-4 text-center">
+        <a href="${s.site || '#'}" target="${s.site ? '_blank' : '_self'}" class="sponsor-link" title="${s.nom}">
+          <div class="sponsor-card">
+            <img src="${s.logo}" alt="${s.nom}" class="img-fluid sponsor-logo">
+            <p class="sponsor-nom mt-2 mb-0">${s.nom}</p>
+          </div>
+        </a>
+      </div>
+    `).join('');
+    
+    container.innerHTML = html;
+    console.log('✅ [SPONSORS] ' + sponsors.length + ' sponsors affichés');
+    
+  } catch (error) {
+    console.error('❌ [SPONSORS] Erreur lors du chargement:', error);
+    if (section) section.style.display = 'none';
+  }
+}
+
+// Exposer la fonction globalement
+window.loadSponsors = loadSponsors;
 

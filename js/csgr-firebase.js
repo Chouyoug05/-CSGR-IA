@@ -596,6 +596,70 @@ window.CSGRFirebase = {
   deletePartenaire: async function(id) {
     if (!this.initialized) await this.init();
     await this.db.collection('partenaires').doc(id.toString()).delete();
+  },
+
+  // SPONSORS
+  getSponsors: async function() {
+    if (!this.initialized) await this.init();
+    if (!this.db) return [];
+    try {
+      const snapshot = await this.db.collection('sponsors').get();
+      if (snapshot.empty) return [];
+      const sponsors = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      return sponsors.sort((a, b) => (a.ordre || 0) - (b.ordre || 0));
+    } catch (error) {
+      console.error('Erreur getSponsors:', error);
+      return [];
+    }
+  },
+
+  saveSponsor: async function(sponsor) {
+    if (!this.initialized) await this.init();
+    const { id, ...data } = sponsor;
+    if (id) {
+      await this.db.collection('sponsors').doc(id.toString()).set(data, { merge: true });
+      return { id: id.toString(), ...data };
+    } else {
+      const docRef = await this.db.collection('sponsors').add(data);
+      return { id: docRef.id, ...data };
+    }
+  },
+
+  deleteSponsor: async function(id) {
+    if (!this.initialized) await this.init();
+    await this.db.collection('sponsors').doc(id.toString()).delete();
+  },
+
+  // SPONSORS
+  getSponsors: async function() {
+    if (!this.initialized) await this.init();
+    if (!this.db) return [];
+    try {
+      const snapshot = await this.db.collection('sponsors').get();
+      if (snapshot.empty) return [];
+      const sponsors = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      return sponsors.sort((a, b) => (a.ordre || 0) - (b.ordre || 0));
+    } catch (error) {
+      console.error('Erreur getSponsors:', error);
+      return [];
+    }
+  },
+
+  saveSponsor: async function(sponsor) {
+    if (!this.initialized) await this.init();
+    const { id, ...data } = sponsor;
+    if (id) {
+      await this.db.collection('sponsors').doc(id.toString()).set(data, { merge: true });
+      return { id: id.toString(), ...data };
+    } else {
+      const docRef = await this.db.collection('sponsors').add(data);
+      return { id: docRef.id, ...data };
+    }
+  },
+
+  deleteSponsor: async function(id) {
+    if (!this.initialized) await this.init();
+    await this.db.collection('sponsors').doc(id.toString()).delete();
   }
 };
 

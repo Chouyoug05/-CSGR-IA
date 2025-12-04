@@ -365,6 +365,9 @@ async function showSection(sectionName) {
         case 'partenaires':
           await loadPartenaires();
           break;
+        case 'sponsors':
+          await loadSponsors();
+          break;
       }
       dataCache[sectionName] = true;
     } catch (error) {
@@ -386,7 +389,8 @@ async function loadAllSections() {
     Promise.resolve(loadPopup()).catch(err => console.error('Erreur chargement popup:', err)),
     loadTemoignages().catch(err => console.error('Erreur chargement temoignages:', err)),
     Promise.resolve(loadContact()).catch(err => console.error('Erreur chargement contact:', err)),
-    loadPartenaires().catch(err => console.error('Erreur chargement partenaires:', err))
+    loadPartenaires().catch(err => console.error('Erreur chargement partenaires:', err)),
+    loadSponsors().catch(err => console.error('Erreur chargement sponsors:', err))
   ];
   
   await Promise.allSettled(loadPromises);
@@ -2271,6 +2275,124 @@ async function deletePartenaire(id) {
 window.showPartenaireModal = showPartenaireModal;
 window.editPartenaire = editPartenaire;
 window.deletePartenaire = deletePartenaire;
+
+// ===== GESTION DES SPONSORS =====
+async function loadSponsors() {
+  try {
+    const sponsors = await CSGRData.getSponsors();
+    const container = $('#sponsors-list');
+    
+    if (!container.length) return;
+    
+    if (!sponsors || sponsors.length === 0) {
+      container.html('<p class="text-muted">Aucun sponsor. Cliquez sur "Nouveau sponsor" pour en ajouter.</p>');
+      return;
+    }
+    
+    const html = `
+      <div class="row">
+        ${sponsors.map(s => `
+          <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card h-100">
+              <div class="card-body text-center">
+                <img src="${s.logo || 'images/csgr-ia-logo.png'}" alt="${s.nom}" style="max-height: 80px; max-width: 100%; object-fit: contain; margin-bottom: 15px;">
+                <h6 class="card-title">${s.nom}</h6>
+                ${s.description ? `<p class="card-text small text-muted">${s.description}</p>` : ''}
+                ${s.site ? `<a href="${s.site}" target="_blank" class="btn btn-sm btn-outline-primary mb-2">Visiter</a>` : ''}
+                <div class="mt-2">
+                  <button class="btn btn-sm btn-info" onclick="editSponsor('${s.id}')"><i class="mdi mdi-pencil"></i></button>
+                  <button class="btn btn-sm btn-danger" onclick="deleteSponsor('${s.id}')"><i class="mdi mdi-delete"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    container.html(html);
+  } catch (error) {
+    console.error('Erreur chargement sponsors:', error);
+    $('#sponsors-list').html('<p class="text-danger">Erreur lors du chargement des sponsors.</p>');
+  }
+}
+
+async function showSponsorModal(id = null) {
+  const form = document.getElementById('sponsor-form');
+  form.reset();
+  $('#sponsor-id').val('');
+  
+  if (id) {
+    const sponsors = await CSGRData.getSponsors();
+    const sponsor = sponsors.find(s => s.id === id);
+    if (sponsor) {
+      $('#sponsor-id').val(sponsor.id);
+      $('#sponsor-nom').val(sponsor.nom || '');
+      $('#sponsor-logo').val(sponsor.logo || '');
+      $('#sponsor-site').val(sponsor.site || '');
+      $('#sponsor-description').val(sponsor.description || '');
+      $('#sponsor-ordre').val(sponsor.ordre || 0);
+    }
+  }
+  
+  $('#sponsorModal').modal('show');
+}
+
+$('#sponsor-form').on('submit', async function(e) {
+  e.preventDefault();
+  
+  const submitBtn = $(this).find('button[type="submit"]');
+  const originalText = submitBtn.html();
+  submitBtn.prop('disabled', true).html('<i class="mdi mdi-loading mdi-spin mr-1"></i>Enregistrement...');
+  
+  try {
+    const sponsor = {
+      id: $('#sponsor-id').val() || null,
+      nom: $('#sponsor-nom').val().trim(),
+      logo: $('#sponsor-logo').val().trim(),
+      site: $('#sponsor-site').val().trim(),
+      description: $('#sponsor-description').val().trim(),
+      ordre: parseInt($('#sponsor-ordre').val()) || 0
+    };
+    
+    if (!sponsor.nom || !sponsor.logo) {
+      alert('⚠️ Le nom et le logo sont requis');
+      submitBtn.prop('disabled', false).html(originalText);
+      return;
+    }
+    
+    await CSGRData.saveSponsor(sponsor);
+    $('#sponsorModal').modal('hide');
+    await loadSponsors();
+    alert('✅ Sponsor enregistré !');
+  } catch (error) {
+    console.error('Erreur sauvegarde sponsor:', error);
+    alert('❌ Erreur lors de la sauvegarde');
+  } finally {
+    submitBtn.prop('disabled', false).html(originalText);
+  }
+});
+
+function editSponsor(id) {
+  showSponsorModal(id);
+}
+
+async function deleteSponsor(id) {
+  if (confirm('Supprimer ce sponsor ?')) {
+    try {
+      await CSGRData.deleteSponsor(id);
+      await loadSponsors();
+      alert('✅ Sponsor supprimé !');
+    } catch (error) {
+      console.error('Erreur suppression:', error);
+      alert('❌ Erreur lors de la suppression');
+    }
+  }
+}
+
+// Exposer les fonctions globalement
+window.showSponsorModal = showSponsorModal;
+window.editSponsor = editSponsor;
+window.deleteSponsor = deleteSponsor;
 
 async function showUserModal(id = null) {
   const form = $('#user-form')[0];
