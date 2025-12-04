@@ -1837,14 +1837,20 @@ html {
   position: fixed;
   top: 15px;
   left: 15px;
-  z-index: 1000;
+  z-index: 10000 !important; /* Au-dessus de tout, y compris navbar fixe */
   font-size: 28px;
   padding: 8px 12px;
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.burger-btn:hover {
+  background: #f8f9fa;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 .burger-btn .mdi {
@@ -1924,6 +1930,7 @@ html {
 @media (max-width: 991px) {
   .burger-btn {
     display: block !important;
+    z-index: 10000 !important; /* Toujours visible au-dessus de la navbar */
   }
   
   /* Cacher TOUT de la navbar Bootstrap sur mobile */
@@ -1944,6 +1951,35 @@ html {
     display: none !important;
     visibility: hidden !important;
   }
+  
+  /* S'assurer que la navbar fixe ne cache pas le bouton burger */
+  .navbar.fixed-top {
+    z-index: 9999 !important; /* En dessous du bouton burger */
+    padding-top: 0;
+  }
+  
+  /* Le bouton burger doit rester visible même avec navbar fixe */
+  .navbar.fixed-top ~ .burger-btn,
+  body.body-top-padding .burger-btn {
+    top: 15px !important;
+    z-index: 10000 !important;
+  }
+  
+  /* Ajuster le padding du body quand navbar est fixe pour éviter que le burger soit caché */
+  body.body-top-padding {
+    padding-top: 0 !important;
+  }
+  
+  /* S'assurer que le header ne cache pas le burger */
+  #header-section {
+    position: relative;
+    z-index: 1;
+  }
+  
+  .navbar {
+    position: relative;
+    z-index: 9999;
+  }
 }
 
 /* ===== CORRECTION MODALS MOBILE ===== */
@@ -1958,6 +1994,64 @@ html {
 .modal-dialog {
   margin: 15px auto;
   max-width: calc(100% - 30px);
+}
+
+/* Modal de contact spécifique */
+#contactModal .modal-dialog {
+  margin: 20px auto;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+  min-height: calc(100% - 40px);
+}
+
+#contactModal .modal-dialog-centered {
+  min-height: calc(100% - 1rem);
+}
+
+#contactModal .modal-content {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+#contactModal .modal-header {
+  padding: 15px 20px;
+  border-bottom: none;
+}
+
+#contactModal .modal-body {
+  padding: 20px;
+}
+
+#contactModal .modal-footer {
+  padding: 15px 20px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+#contactModal .form-group {
+  margin-bottom: 18px;
+}
+
+#contactModal .form-group label {
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 6px;
+  display: block;
+}
+
+#contactModal .form-control {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+#contactModal .form-control:focus {
+  border-color: #0061f2;
+  box-shadow: 0 0 0 3px rgba(0, 97, 242, 0.1);
 }
 
 @media (max-width: 576px) {
@@ -1990,17 +2084,61 @@ html {
   }
   
   /* Formulaire de contact mobile */
+  #contactModal .modal-dialog {
+    margin: 15px auto;
+    max-width: calc(100% - 30px);
+    min-height: auto;
+    display: flex;
+    align-items: center;
+  }
+  
+  #contactModal .modal-dialog-centered {
+    min-height: calc(100% - 2rem);
+  }
+  
+  #contactModal .modal-content {
+    width: 100%;
+  }
+  
+  #contactModal .modal-header {
+    padding: 12px 15px;
+  }
+  
+  #contactModal .modal-body {
+    padding: 15px;
+  }
+  
   #contactModal .form-group {
-    margin-bottom: 12px;
+    margin-bottom: 15px;
+  }
+  
+  #contactModal .form-group label {
+    font-size: 14px;
+    margin-bottom: 5px;
   }
   
   #contactModal .form-control {
     font-size: 16px; /* Évite le zoom sur iOS */
     padding: 10px 12px;
+    border-radius: 8px;
   }
   
   #contactModal textarea.form-control {
     min-height: 100px;
+    resize: vertical;
+  }
+  
+  #contactModal .modal-footer {
+    padding: 12px 15px;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  #contactModal .modal-footer .btn {
+    flex: 1;
+    margin: 0;
+    padding: 10px 15px;
+    font-size: 14px;
   }
   
   /* Popup promotion mobile */
