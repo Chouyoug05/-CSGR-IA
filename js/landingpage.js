@@ -92,65 +92,35 @@ if (typeof AOS !== 'undefined') {
   console.warn('AOS (Animate On Scroll) n\'est pas chargé. Les animations peuvent ne pas fonctionner.');
 }
 
-//SIDEBAR-OPEN - Menu mobile
+//SIDEBAR-OPEN - Menu mobile (version simple)
 $(document).ready(function() {
-  var $navbar = $('#navbarSupportedContent');
-  var $body = $('body');
-  var $togglers = $('.navbar-toggler');
   
-  // Fonction pour ouvrir le menu
-  function openMenu() {
-    $navbar.addClass('show');
-    $body.addClass('sidebar-open');
-    console.log('Menu ouvert');
-  }
-  
-  // Fonction pour fermer le menu
-  function closeMenu() {
-    $navbar.removeClass('show');
-    $body.removeClass('sidebar-open');
-    console.log('Menu fermé');
-  }
-  
-  // Clic sur le bouton hamburger (ouvrir)
-  $togglers.first().on('click', function(e) {
+  // Bouton hamburger - ouvrir le menu
+  $('.navbar-toggler').not('.close-button').on('click', function(e) {
     e.preventDefault();
-    e.stopPropagation();
-    if ($navbar.hasClass('show')) {
-      closeMenu();
-    } else {
-      openMenu();
-    }
+    $('#navbarSupportedContent').addClass('show');
+    $('body').addClass('sidebar-open');
   });
   
-  // Clic sur le bouton fermer (X)
+  // Bouton X - fermer le menu
   $('.close-button').on('click', function(e) {
     e.preventDefault();
-    e.stopPropagation();
-    closeMenu();
+    $('#navbarSupportedContent').removeClass('show');
+    $('body').removeClass('sidebar-open');
   });
   
-  // Fermer le menu quand on clique sur un lien
-  $navbar.find('.nav-link').on('click', function() {
-    if (window.innerWidth < 992) {
-      closeMenu();
-    }
+  // Clic sur un lien - fermer le menu
+  $('#navbarSupportedContent .nav-link').on('click', function() {
+    $('#navbarSupportedContent').removeClass('show');
+    $('body').removeClass('sidebar-open');
   });
   
-  // Fermer si on clique en dehors du menu
-  $(document).on('click', function(e) {
-    if ($navbar.hasClass('show')) {
-      if (!$(e.target).closest('#navbarSupportedContent, .navbar-toggler').length) {
-        closeMenu();
-      }
-    }
-  });
 });
 
-// Fermer le menu si on redimensionne vers desktop
-window.onresize = function() {
+// Redimensionnement - fermer le menu sur desktop
+$(window).on('resize', function() {
   if (window.innerWidth >= 992) {
-    $('body').removeClass('sidebar-open');
     $('#navbarSupportedContent').removeClass('show');
+    $('body').removeClass('sidebar-open');
   }
-}
+});
