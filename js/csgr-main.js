@@ -131,7 +131,7 @@ async function loadProgrammes() {
             <div class="card-body d-flex flex-column">
               <div class="mb-3">
                 <h5 class="card-title mb-2" style="color: #2c3e50; font-weight: 600;">${programme.nom || 'Programme'}</h5>
-                <p class="text-muted mb-3" style="line-height: 1.6; min-height: 48px;">${programme.descriptionCourte || 'Découvrez ce programme de formation en intelligence artificielle.'}</p>
+                <p class="text-muted mb-3" style="line-height: 1.6; min-height: 48px;">${programme.descriptionCourte || 'Découvrez ce programme de recherche et formation en intelligence artificielle.'}</p>
               </div>
               <div class="programme-info mb-3 flex-grow-1">
                 <div class="d-flex align-items-center mb-2">

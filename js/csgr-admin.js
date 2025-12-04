@@ -895,7 +895,7 @@ function showReceiptModal(inscription) {
             <div id="receipt-content" style="background: white; padding: 20px; font-size: 14px;">
               <div style="text-align: center; border-bottom: 2px solid #0061f2; padding-bottom: 12px; margin-bottom: 15px;">
                 <h3 style="color: #0061f2; margin: 0; font-size: 20px;">CSGR-IA</h3>
-                <small style="color: #666;">Comité Gabonais - Formation IA</small>
+                <small style="color: #666;">Comité Scientifique - Recherche IA</small>
                 <div style="background: #0061f2; color: white; display: inline-block; padding: 4px 15px; border-radius: 15px; margin-top: 8px; font-size: 11px; font-weight: bold;">
                   REÇU DE PAIEMENT
                 </div>
@@ -1073,7 +1073,7 @@ Votre paiement a été validé avec succès !
 
 Merci pour votre confiance !
 
-_CSGR-IA - Comité Gabonais de Formation en Intelligence Artificielle_`;
+_CSGR-IA - Comité Scientifique Gabonais de Recherche sur l'Intelligence Artificielle_`;
 
   // Nettoyer le numéro de téléphone
   let phoneNumber = telephone.replace(/[^0-9]/g, '');
@@ -1104,7 +1104,7 @@ Merci pour votre confiance !
 
 Cordialement,
 L'équipe CSGR-IA
-Comité Gabonais de Formation en Intelligence Artificielle`;
+Comité Scientifique Gabonais de Recherche sur l'Intelligence Artificielle`;
 
   const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   window.open(mailtoUrl);
