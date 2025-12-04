@@ -1923,17 +1923,100 @@ html {
 /* Responsive mobile */
 @media (max-width: 991px) {
   .burger-btn {
-    display: block;
+    display: block !important;
   }
   
-  /* Cacher la navbar Bootstrap sur mobile */
-  .navbar-collapse {
+  /* Cacher TOUT de la navbar Bootstrap sur mobile */
+  .navbar-collapse,
+  .navbar-menu-wrapper,
+  .navbar-toggler,
+  .navbar .btn-contact-us {
     display: none !important;
   }
   
-  /* Ajuster le header */
+  /* Centrer le logo */
   .navbar-brand-wrapper {
     justify-content: center;
+  }
+  
+  /* S'assurer que le bouton toggler Bootstrap est caché */
+  .navbar-toggler {
+    display: none !important;
+    visibility: hidden !important;
+  }
+}
+
+/* ===== CORRECTION MODALS MOBILE ===== */
+.modal {
+  z-index: 3000 !important;
+}
+
+.modal-backdrop {
+  z-index: 2900 !important;
+}
+
+.modal-dialog {
+  margin: 15px auto;
+  max-width: calc(100% - 30px);
+}
+
+@media (max-width: 576px) {
+  .modal-dialog {
+    margin: 10px;
+    max-width: calc(100% - 20px);
+  }
+  
+  .modal-content {
+    border-radius: 12px;
+  }
+  
+  .modal-header {
+    padding: 12px 15px;
+  }
+  
+  .modal-body {
+    padding: 15px;
+  }
+  
+  .modal-footer {
+    padding: 10px 15px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .modal-footer .btn {
+    flex: 1;
+    min-width: 100px;
+  }
+  
+  /* Formulaire de contact mobile */
+  #contactModal .form-group {
+    margin-bottom: 12px;
+  }
+  
+  #contactModal .form-control {
+    font-size: 16px; /* Évite le zoom sur iOS */
+    padding: 10px 12px;
+  }
+  
+  #contactModal textarea.form-control {
+    min-height: 100px;
+  }
+  
+  /* Popup promotion mobile */
+  #promotionModal .modal-dialog {
+    max-width: calc(100% - 40px) !important;
+    margin: 20px auto;
+  }
+  
+  #promotionModal .modal-footer {
+    flex-direction: column;
+    gap: 8px !important;
+  }
+  
+  #promotionModal .modal-footer .btn {
+    width: 100%;
+    margin: 0 !important;
   }
 }
 

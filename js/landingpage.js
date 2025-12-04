@@ -92,35 +92,4 @@ if (typeof AOS !== 'undefined') {
   console.warn('AOS (Animate On Scroll) n\'est pas chargé. Les animations peuvent ne pas fonctionner.');
 }
 
-//SIDEBAR-OPEN - Menu mobile (version simple)
-$(document).ready(function() {
-  
-  // Bouton hamburger - ouvrir le menu
-  $('.navbar-toggler').not('.close-button').on('click', function(e) {
-    e.preventDefault();
-    $('#navbarSupportedContent').addClass('show');
-    $('body').addClass('sidebar-open');
-  });
-  
-  // Bouton X - fermer le menu
-  $('.close-button').on('click', function(e) {
-    e.preventDefault();
-    $('#navbarSupportedContent').removeClass('show');
-    $('body').removeClass('sidebar-open');
-  });
-  
-  // Clic sur un lien - fermer le menu
-  $('#navbarSupportedContent .nav-link').on('click', function() {
-    $('#navbarSupportedContent').removeClass('show');
-    $('body').removeClass('sidebar-open');
-  });
-  
-});
-
-// Redimensionnement - fermer le menu sur desktop
-$(window).on('resize', function() {
-  if (window.innerWidth >= 992) {
-    $('#navbarSupportedContent').removeClass('show');
-    $('body').removeClass('sidebar-open');
-  }
-});
+// Note: Le menu mobile est maintenant géré dans index.html avec la sidebar custom

@@ -60,27 +60,25 @@
     <nav class="navbar navbar-expand-lg pl-3 pl-sm-0" id="navbar">
     <div class="container">
       <div class="navbar-brand-wrapper d-flex w-100">
-          <a href="index.html"><img src="images/csgr-ia-logo.png" alt="CSGR-IA Logo"></a>
-        <button class="navbar-toggler ml-auto d-lg-none d-none" type="button">
-          <span class="mdi mdi-menu navbar-toggler-icon"></span>
-        </button> 
+        <a href="index.html"><img src="images/csgr-ia-logo.png" alt="CSGR-IA Logo"></a>
       </div>
-      <div class="collapse navbar-collapse navbar-menu-wrapper" id="navbarSupportedContent">
-        <ul class="navbar-nav align-items-lg-center align-items-start ml-auto">
+      <!-- Menu Desktop uniquement -->
+      <div class="collapse navbar-collapse navbar-menu-wrapper d-none d-lg-flex" id="navbarSupportedContent">
+        <ul class="navbar-nav align-items-center ml-auto">
           <li class="nav-item">
-              <a class="nav-link" href="#header-section">Accueil</a>
+            <a class="nav-link" href="#header-section">Accueil</a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="#programmes-section">Programmes</a>
+            <a class="nav-link" href="#programmes-section">Programmes</a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="#actualites-section">Actualités</a>
+            <a class="nav-link" href="#actualites-section">Actualités</a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="#feedback-section">Témoignages</a>
+            <a class="nav-link" href="#feedback-section">Témoignages</a>
           </li>
-          <li class="nav-item btn-contact-us pl-4 pl-lg-0">
-              <button class="btn btn-info" data-toggle="modal" data-target="#contactModal">Contact</button>
+          <li class="nav-item btn-contact-us pl-4">
+            <button class="btn btn-info" data-toggle="modal" data-target="#contactModal">Contact</button>
           </li>
         </ul>
       </div>
@@ -229,37 +227,41 @@
   
   <!-- Modal de Contact -->
   <div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="contactModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-          <h4 class="modal-title" id="contactModalLabel">Contactez-nous</h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header" style="background: linear-gradient(135deg, #0061f2 0%, #00a8e8 100%); border: none;">
+          <h5 class="modal-title text-white" id="contactModalLabel">
+            <i class="mdi mdi-email-outline mr-2"></i>Contactez-nous
+          </h5>
+          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close" style="opacity: 1;">
             <span aria-hidden="true">&times;</span>
           </button>
-            </div>
-            <div class="modal-body">
+        </div>
+        <div class="modal-body">
           <form id="contact-modal-form">
-                <div class="form-group">
-              <label for="contact-name">Nom</label>
+            <div class="form-group">
+              <label for="contact-name"><i class="mdi mdi-account mr-1"></i>Nom</label>
               <input type="text" class="form-control" id="contact-name" placeholder="Votre nom" required>
-                </div>
-                <div class="form-group">
-              <label for="contact-email-modal">Email</label>
-              <input type="email" class="form-control" id="contact-email-modal" placeholder="votre@email.com" required>
-                </div>
-                <div class="form-group">
-              <label for="contact-message">Message</label>
-              <textarea class="form-control" id="contact-message" rows="5" placeholder="Votre message" required></textarea>
-                </div>
-              </form>
             </div>
-            <div class="modal-footer">
-          <button type="button" class="btn btn-light" data-dismiss="modal">Fermer</button>
-          <button type="button" class="btn btn-success" id="send-contact-btn">Envoyer</button>
+            <div class="form-group">
+              <label for="contact-email-modal"><i class="mdi mdi-email mr-1"></i>Email</label>
+              <input type="email" class="form-control" id="contact-email-modal" placeholder="votre@email.com" required>
+            </div>
+            <div class="form-group">
+              <label for="contact-message"><i class="mdi mdi-message-text mr-1"></i>Message</label>
+              <textarea class="form-control" id="contact-message" rows="4" placeholder="Votre message..." required></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer" style="border-top: 1px solid #eee;">
+          <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Annuler</button>
+          <button type="button" class="btn btn-primary" id="send-contact-btn">
+            <i class="mdi mdi-send mr-1"></i>Envoyer
+          </button>
         </div>
       </div>
-            </div>
-          </div>
+    </div>
+  </div>
   
   <!-- Modal de promotion (compact et moderne) -->
   <div class="modal fade" id="promotionModal" tabindex="-1" role="dialog" aria-hidden="true">
