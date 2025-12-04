@@ -564,6 +564,38 @@ window.CSGRFirebase = {
     if (!this.initialized) await this.init();
     await this.db.collection('config').doc('contact').set(contact);
     return contact;
+  },
+
+  // PARTENAIRES
+  getPartenaires: async function() {
+    if (!this.initialized) await this.init();
+    if (!this.db) return [];
+    try {
+      const snapshot = await this.db.collection('partenaires').get();
+      if (snapshot.empty) return [];
+      const partenaires = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      return partenaires.sort((a, b) => (a.ordre || 0) - (b.ordre || 0));
+    } catch (error) {
+      console.error('Erreur getPartenaires:', error);
+      return [];
+    }
+  },
+
+  savePartenaire: async function(partenaire) {
+    if (!this.initialized) await this.init();
+    const { id, ...data } = partenaire;
+    if (id) {
+      await this.db.collection('partenaires').doc(id.toString()).set(data, { merge: true });
+      return { id: id.toString(), ...data };
+    } else {
+      const docRef = await this.db.collection('partenaires').add(data);
+      return { id: docRef.id, ...data };
+    }
+  },
+
+  deletePartenaire: async function(id) {
+    if (!this.initialized) await this.init();
+    await this.db.collection('partenaires').doc(id.toString()).delete();
   }
 };
 

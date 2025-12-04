@@ -193,6 +193,22 @@ const CSGRData = {
   saveContact: async function(contact) {
     await this.ensureFirebase();
     return await window.CSGRFirebase.saveContact(contact);
+  },
+
+  // Partenaires
+  getPartenaires: async function() {
+    await this.ensureFirebase();
+    return await window.CSGRFirebase.getPartenaires();
+  },
+  
+  savePartenaire: async function(partenaire) {
+    await this.ensureFirebase();
+    return await window.CSGRFirebase.savePartenaire(partenaire);
+  },
+  
+  deletePartenaire: async function(id) {
+    await this.ensureFirebase();
+    return await window.CSGRFirebase.deletePartenaire(id);
   }
 };
 

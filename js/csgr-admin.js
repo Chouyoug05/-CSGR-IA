@@ -362,6 +362,9 @@ async function showSection(sectionName) {
         case 'contact':
           await loadContact();
           break;
+        case 'partenaires':
+          await loadPartenaires();
+          break;
       }
       dataCache[sectionName] = true;
     } catch (error) {
@@ -382,7 +385,8 @@ async function loadAllSections() {
     Promise.resolve(loadCTA()).catch(err => console.error('Erreur chargement CTA:', err)),
     Promise.resolve(loadPopup()).catch(err => console.error('Erreur chargement popup:', err)),
     loadTemoignages().catch(err => console.error('Erreur chargement temoignages:', err)),
-    Promise.resolve(loadContact()).catch(err => console.error('Erreur chargement contact:', err))
+    Promise.resolve(loadContact()).catch(err => console.error('Erreur chargement contact:', err)),
+    loadPartenaires().catch(err => console.error('Erreur chargement partenaires:', err))
   ];
   
   await Promise.allSettled(loadPromises);
@@ -2149,6 +2153,124 @@ async function deleteTemoignage(id) {
     }
   }
 }
+
+// ===== GESTION DES PARTENAIRES =====
+async function loadPartenaires() {
+  try {
+    const partenaires = await CSGRData.getPartenaires();
+    const container = $('#partenaires-list');
+    
+    if (!container.length) return;
+    
+    if (!partenaires || partenaires.length === 0) {
+      container.html('<p class="text-muted">Aucun partenaire. Cliquez sur "Nouveau partenaire" pour en ajouter.</p>');
+      return;
+    }
+    
+    const html = `
+      <div class="row">
+        ${partenaires.map(p => `
+          <div class="col-md-4 col-lg-3 mb-4">
+            <div class="card h-100">
+              <div class="card-body text-center">
+                <img src="${p.logo || 'images/csgr-ia-logo.png'}" alt="${p.nom}" style="max-height: 80px; max-width: 100%; object-fit: contain; margin-bottom: 15px;">
+                <h6 class="card-title">${p.nom}</h6>
+                ${p.description ? `<p class="card-text small text-muted">${p.description}</p>` : ''}
+                ${p.site ? `<a href="${p.site}" target="_blank" class="btn btn-sm btn-outline-primary mb-2">Visiter</a>` : ''}
+                <div class="mt-2">
+                  <button class="btn btn-sm btn-info" onclick="editPartenaire('${p.id}')"><i class="mdi mdi-pencil"></i></button>
+                  <button class="btn btn-sm btn-danger" onclick="deletePartenaire('${p.id}')"><i class="mdi mdi-delete"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    container.html(html);
+  } catch (error) {
+    console.error('Erreur chargement partenaires:', error);
+    $('#partenaires-list').html('<p class="text-danger">Erreur lors du chargement des partenaires.</p>');
+  }
+}
+
+async function showPartenaireModal(id = null) {
+  const form = document.getElementById('partenaire-form');
+  form.reset();
+  $('#partenaire-id').val('');
+  
+  if (id) {
+    const partenaires = await CSGRData.getPartenaires();
+    const partenaire = partenaires.find(p => p.id === id);
+    if (partenaire) {
+      $('#partenaire-id').val(partenaire.id);
+      $('#partenaire-nom').val(partenaire.nom || '');
+      $('#partenaire-logo').val(partenaire.logo || '');
+      $('#partenaire-site').val(partenaire.site || '');
+      $('#partenaire-description').val(partenaire.description || '');
+      $('#partenaire-ordre').val(partenaire.ordre || 0);
+    }
+  }
+  
+  $('#partenaireModal').modal('show');
+}
+
+$('#partenaire-form').on('submit', async function(e) {
+  e.preventDefault();
+  
+  const submitBtn = $(this).find('button[type="submit"]');
+  const originalText = submitBtn.html();
+  submitBtn.prop('disabled', true).html('<i class="mdi mdi-loading mdi-spin mr-1"></i>Enregistrement...');
+  
+  try {
+    const partenaire = {
+      id: $('#partenaire-id').val() || null,
+      nom: $('#partenaire-nom').val().trim(),
+      logo: $('#partenaire-logo').val().trim(),
+      site: $('#partenaire-site').val().trim(),
+      description: $('#partenaire-description').val().trim(),
+      ordre: parseInt($('#partenaire-ordre').val()) || 0
+    };
+    
+    if (!partenaire.nom || !partenaire.logo) {
+      alert('⚠️ Le nom et le logo sont requis');
+      submitBtn.prop('disabled', false).html(originalText);
+      return;
+    }
+    
+    await CSGRData.savePartenaire(partenaire);
+    $('#partenaireModal').modal('hide');
+    await loadPartenaires();
+    alert('✅ Partenaire enregistré !');
+  } catch (error) {
+    console.error('Erreur sauvegarde partenaire:', error);
+    alert('❌ Erreur lors de la sauvegarde');
+  } finally {
+    submitBtn.prop('disabled', false).html(originalText);
+  }
+});
+
+function editPartenaire(id) {
+  showPartenaireModal(id);
+}
+
+async function deletePartenaire(id) {
+  if (confirm('Supprimer ce partenaire ?')) {
+    try {
+      await CSGRData.deletePartenaire(id);
+      await loadPartenaires();
+      alert('✅ Partenaire supprimé !');
+    } catch (error) {
+      console.error('Erreur suppression:', error);
+      alert('❌ Erreur lors de la suppression');
+    }
+  }
+}
+
+// Exposer les fonctions globalement
+window.showPartenaireModal = showPartenaireModal;
+window.editPartenaire = editPartenaire;
+window.deletePartenaire = deletePartenaire;
 
 async function showUserModal(id = null) {
   const form = $('#user-form')[0];

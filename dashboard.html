@@ -209,6 +209,9 @@
       <a href="#" data-section="contact">
         <i class="mdi mdi-contact-mail"></i> Contact
       </a>
+      <a href="#" data-section="partenaires">
+        <i class="mdi mdi-handshake"></i> Partenaires
+      </a>
     </nav>
   </div>
 
@@ -384,6 +387,54 @@
               <button type="submit" class="btn btn-primary">Enregistrer</button>
             </form>
           </div>
+        </div>
+      </div>
+
+      <!-- Section Partenaires -->
+      <div id="section-partenaires" class="section-content">
+        <div class="mb-4">
+          <h2 class="mb-3">Partenaires</h2>
+          <button class="btn btn-success" onclick="showPartenaireModal()"><i class="mdi mdi-plus mr-2"></i>Nouveau partenaire</button>
+        </div>
+        <div id="partenaires-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Partenaire -->
+  <div class="modal fade" id="partenaireModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Partenaire</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="partenaire-form">
+            <input type="hidden" id="partenaire-id">
+            <div class="form-group">
+              <label>Nom du partenaire *</label>
+              <input type="text" class="form-control" id="partenaire-nom" required>
+            </div>
+            <div class="form-group">
+              <label>Logo (URL de l'image) *</label>
+              <input type="text" class="form-control" id="partenaire-logo" placeholder="https://exemple.com/logo.png" required>
+              <small class="form-text text-muted">Utilisez une URL d'image (PNG, JPG, SVG)</small>
+            </div>
+            <div class="form-group">
+              <label>Site web</label>
+              <input type="url" class="form-control" id="partenaire-site" placeholder="https://www.exemple.com">
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea class="form-control" id="partenaire-description" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Ordre d'affichage</label>
+              <input type="number" class="form-control" id="partenaire-ordre" value="0">
+            </div>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+          </form>
         </div>
       </div>
     </div>

@@ -22,7 +22,8 @@ $(document).ready(async function() {
     loadData(loadActualites, 'actualités'),
     loadData(loadTemoignages, 'témoignages'),
     loadData(loadCTA, 'CTA'),
-    loadData(loadContact, 'contact')
+    loadData(loadContact, 'contact'),
+    loadData(loadPartenaires, 'partenaires')
   ]);
   
   // Gérer les filtres de programmes
@@ -585,4 +586,52 @@ Ce message a été envoyé automatiquement depuis le site CSGR-IA.
     btn.prop('disabled', false).html(originalText);
   }
 }
+
+// ===== CHARGEMENT DES PARTENAIRES =====
+async function loadPartenaires() {
+  console.log('🤝 [PARTENAIRES] Chargement des partenaires...');
+  const container = document.getElementById('partenaires-container');
+  const section = document.getElementById('partenaires-section');
+  
+  if (!container) {
+    console.log('⚠️ [PARTENAIRES] Container partenaires non trouvé');
+    return;
+  }
+  
+  try {
+    const partenaires = await CSGRData.getPartenaires();
+    console.log('🤝 [PARTENAIRES] Données reçues:', partenaires);
+    
+    if (!partenaires || partenaires.length === 0) {
+      console.log('⚠️ [PARTENAIRES] Aucun partenaire à afficher');
+      if (section) section.style.display = 'none';
+      return;
+    }
+    
+    // Afficher la section
+    if (section) section.style.display = 'block';
+    
+    // Générer le HTML des partenaires
+    const html = partenaires.map(p => `
+      <div class="col-6 col-md-4 col-lg-2 mb-4 text-center">
+        <a href="${p.site || '#'}" target="${p.site ? '_blank' : '_self'}" class="partenaire-link" title="${p.nom}">
+          <div class="partenaire-card">
+            <img src="${p.logo}" alt="${p.nom}" class="img-fluid partenaire-logo">
+            <p class="partenaire-nom mt-2 mb-0">${p.nom}</p>
+          </div>
+        </a>
+      </div>
+    `).join('');
+    
+    container.innerHTML = html;
+    console.log('✅ [PARTENAIRES] ' + partenaires.length + ' partenaires affichés');
+    
+  } catch (error) {
+    console.error('❌ [PARTENAIRES] Erreur lors du chargement:', error);
+    if (section) section.style.display = 'none';
+  }
+}
+
+// Exposer la fonction globalement
+window.loadPartenaires = loadPartenaires;
 
