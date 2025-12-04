@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>Actualité - CSGR-IA</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="css/style.min.css">
+  <link rel="stylesheet" href="css/csgr-custom.css">
+</head>
+<body>
+  <header id="header-section">
+    <nav class="navbar navbar-expand-lg pl-3 pl-sm-0" id="navbar">
+      <div class="container">
+        <div class="navbar-brand-wrapper d-flex w-100">
+          <a href="index.html"><img src="images/csgr-ia-logo.png" alt="CSGR-IA Logo"></a>
+          <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+            <span class="mdi mdi-menu navbar-toggler-icon"></span>
+          </button> 
+        </div>
+        <div class="collapse navbar-collapse navbar-menu-wrapper" id="navbarSupportedContent">
+          <ul class="navbar-nav align-items-lg-center align-items-start ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Accueil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#programmes-section">Programmes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#actualites-section">Actualités</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#contact-section">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div> 
+    </nav>   
+  </header>
+
+  <div class="content-wrapper">
+    <div class="container py-5">
+      <a href="index.html#actualites-section" class="btn btn-outline-secondary mb-4">
+        <i class="mdi mdi-arrow-left mr-2"></i>Retour aux actualités
+      </a>
+      <div id="actualite-details">
+        <div class="text-center">
+          <p class="text-muted">Chargement...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="border-top">
+    <p class="text-center text-muted pt-4">Copyright © 2025 <strong>CSGR-IA</strong>. Tous droits réservés.</p>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  
+  <script src="vendors/jquery/jquery.min.js"></script>
+  <script src="vendors/bootstrap/bootstrap.min.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/csgr-firebase.js"></script>
+  <script src="js/csgr-data.js"></script>
+  <script>
+    function formatDate(dateValue) {
+      if (!dateValue) return 'N/A';
+      
+      try {
+        let date;
+        
+        // Si c'est un Timestamp Firebase
+        if (dateValue && typeof dateValue.toDate === 'function') {
+          date = dateValue.toDate();
+        } else if (dateValue && dateValue.seconds) {
+          date = new Date(dateValue.seconds * 1000);
+        } else if (dateValue instanceof Date) {
+          date = dateValue;
+        } else {
+          date = new Date(dateValue);
+        }
+        
+        if (isNaN(date.getTime())) return 'N/A';
+        
+        return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+      } catch (error) {
+        console.error('Erreur formatDate:', error);
+        return 'N/A';
+      }
+    }
+
+    async function displayActualite(actualite) {
+      if (!actualite) {
+        $('#actualite-details').html('<div class="alert alert-danger">Actualité non trouvée.</div>');
+        return;
+      }
+
+      const dateFormatted = formatDate(actualite.date);
+      const titre = actualite.titre || 'Sans titre';
+      const description = actualite.description || '';
+      const contenu = actualite.contenu || description || '';
+      const lieu = actualite.lieu || '';
+      const image = actualite.image || '';
+
+      const html = `
+        <div class="row">
+          <div class="col-12 col-md-8 mx-auto">
+            <h1 class="mb-4">${titre}</h1>
+            <p class="text-muted mb-4">
+              <i class="mdi mdi-calendar mr-2"></i> ${dateFormatted}
+              ${lieu ? `<span class="ml-3"><i class="mdi mdi-map-marker mr-2"></i> ${lieu}</span>` : ''}
+            </p>
+            ${image ? `<img src="${image}" class="img-fluid mb-4 rounded" alt="${titre}" style="max-height: 400px; object-fit: cover; width: 100%;">` : ''}
+            <div class="card border-0 shadow-sm">
+              <div class="card-body p-4">
+                ${description ? `<p class="lead mb-4">${description}</p>` : ''}
+                <div class="actualite-content" style="line-height: 1.8; font-size: 1.05rem;">
+                  ${contenu.replace(/\n/g, '<br>')}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      $('#actualite-details').html(html);
+    }
+
+    $(document).ready(async function() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const actualiteId = urlParams.get('id');
+        
+        if (!actualiteId) {
+          $('#actualite-details').html('<div class="alert alert-danger">Aucune actualité spécifiée.</div>');
+          return;
+        }
+
+        // Attendre que Firebase soit initialisé
+        if (!window.CSGRFirebase || !window.CSGRFirebase.initialized) {
+          await window.CSGRFirebase.init();
+        }
+
+        const actualite = await CSGRData.getActualite(actualiteId);
+        await displayActualite(actualite);
+      } catch (error) {
+        console.error('❌ Erreur lors du chargement de l\'actualité:', error);
+        $('#actualite-details').html('<div class="alert alert-danger">Erreur lors du chargement de l\'actualité. Veuillez réessayer.</div>');
+      }
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,162 @@
+═══════════════════════════════════════════════════════════════
+  ÉTAPES POUR CONNECTER FIREBASE AU PROJET CSGR-IA
+═══════════════════════════════════════════════════════════════
+
+ÉTAPE 1 : CONFIGURER FIRESTORE DANS FIREBASE CONSOLE
+─────────────────────────────────────────────────────
+1. Allez sur https://console.firebase.google.com
+2. Sélectionnez le projet "iagabon"
+3. Cliquez sur "Firestore Database" dans le menu gauche
+4. Cliquez sur "Créer une base de données"
+5. Choisissez "Démarrer en mode test" (pour le développement)
+6. Sélectionnez une région (ex: europe-west)
+7. Cliquez sur "Activer"
+
+ÉTAPE 2 : CONFIGURER LES RÈGLES FIRESTORE
+──────────────────────────────────────────
+1. Dans Firestore Database, allez dans l'onglet "Règles"
+2. Remplacez les règles par :
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+
+3. Cliquez sur "Publier"
+4. ATTENTION : Ces règles permettent l'accès complet. Pour la production, 
+   configurez des règles plus strictes avec authentification.
+
+ÉTAPE 3 : CRÉER LES COLLECTIONS
+────────────────────────────────
+Dans Firestore Database > Données, créez ces collections :
+
+Collection: users
+  - Document 1:
+    * username: "admin"
+    * email: "admin@csgr-ia.com"
+    * password: "admin123"
+    * nom: "Administrateur"
+    * role: "admin"
+
+Collection: programmes
+  (vide pour l'instant, sera rempli via l'admin)
+
+Collection: actualites
+  (vide pour l'instant, sera rempli via l'admin)
+
+Collection: statistiques
+  (vide pour l'instant, sera rempli via l'admin)
+
+Collection: inscriptions
+  (vide pour l'instant, sera rempli via les utilisateurs)
+
+Collection: config
+  - Document: cta
+    * titre: "Prêt à commencer votre formation ?"
+    * description: "Inscrivez-vous dès maintenant"
+    * texteBouton: "Voir les programmes"
+    * lienBouton: "#programmes-section"
+    * actif: true
+  
+  - Document: popup
+    * programmeId: null
+    * delai: 3000
+    * cooldown: 7
+    * actif: false
+  
+  - Document: contact
+    * email: "contact@csgr-ia.com"
+    * phone: "+241 01 23 45 67 89"
+    * address: "Libreville, Gabon"
+
+ÉTAPE 4 : VÉRIFIER L'INTÉGRATION
+─────────────────────────────────
+1. Ouvrez admin.html dans votre navigateur
+2. Ouvrez la console du navigateur (F12)
+3. Vous devriez voir : "✅ Firebase initialisé avec succès"
+4. Connectez-vous avec :
+   - Username: admin
+   - Password: admin123
+
+ÉTAPE 5 : TESTER LES FONCTIONNALITÉS
+─────────────────────────────────────
+1. Authentification : Se connecter avec les identifiants créés
+2. Programmes : Créer, modifier, supprimer un programme
+3. Actualités : Créer, modifier, supprimer une actualité
+4. Statistiques : Créer, modifier, supprimer une statistique
+5. Inscriptions : Voir les inscriptions depuis le site public
+6. Utilisateurs : Gérer les utilisateurs admin
+7. CTA/Popup/Contact : Configurer depuis l'admin
+
+ÉTAPE 6 : STRUCTURE DES DONNÉES
+────────────────────────────────
+PROGRAMMES:
+- nom (string)
+- descriptionCourte (string)
+- descriptionLongue (string)
+- prix (number)
+- dateDebut (timestamp)
+- duree (string)
+- lieu (string)
+- categorie (string)
+- icone (string)
+- couleur (string)
+- ordre (number)
+
+ACTUALITÉS:
+- titre (string)
+- description (string)
+- contenu (string)
+- date (timestamp)
+- lieu (string)
+- image (string)
+- ordre (number)
+
+STATISTIQUES:
+- label (string)
+- valeur (string)
+- icone (string)
+- couleur (string)
+- ordre (number)
+
+INSCRIPTIONS:
+- nom (string)
+- prenom (string)
+- email (string)
+- telephone (string)
+- programmeId (string)
+- programmeNom (string)
+- prix (number)
+- dateInscription (timestamp)
+- statutPaiement (string: "en_attente", "valide", "echoue", "rembourse")
+- modePaiement (string)
+- numeroMobile (string)
+- codeTransaction (string)
+- preuvePaiement (string - base64)
+- preuvePaiementNom (string)
+
+USERS:
+- username (string)
+- email (string)
+- password (string)
+- nom (string)
+- role (string: "admin")
+
+═══════════════════════════════════════════════════════════════
+  NOTES IMPORTANTES
+═══════════════════════════════════════════════════════════════
+
+- Les mots de passe sont stockés en clair (non sécurisé pour production)
+- Pour la production, utilisez Firebase Authentication
+- Les règles Firestore actuelles permettent l'accès complet
+- Le système utilise Firebase si disponible, sinon localStorage
+- Toutes les fonctions retournent des Promises pour compatibilité
+
+═══════════════════════════════════════════════════════════════
+
+
+

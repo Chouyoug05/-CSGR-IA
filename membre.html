@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>Espace Membre - CSGR-IA</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="css/style.min.css">
+  <link rel="stylesheet" href="css/csgr-custom.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #0061f2 0%, #00a8e8 100%);
+      min-height: 100vh;
+    }
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .login-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+      max-width: 450px;
+      width: 100%;
+    }
+    .login-header {
+      background: linear-gradient(135deg, #0061f2 0%, #00a8e8 100%);
+      color: white;
+      padding: 40px 30px;
+      text-align: center;
+    }
+    .login-header img {
+      max-height: 60px;
+      margin-bottom: 15px;
+    }
+    .login-header h2 {
+      margin: 0;
+      font-weight: 700;
+    }
+    .login-header p {
+      margin: 10px 0 0 0;
+      opacity: 0.9;
+    }
+    .login-body {
+      padding: 40px 30px;
+    }
+    .form-group label {
+      font-weight: 600;
+      color: #333;
+    }
+    .form-control {
+      border-radius: 10px;
+      padding: 12px 15px;
+      border: 2px solid #e0e0e0;
+    }
+    .form-control:focus {
+      border-color: #0061f2;
+      box-shadow: 0 0 0 3px rgba(0, 97, 242, 0.2);
+    }
+    .btn-login {
+      background: linear-gradient(135deg, #0061f2 0%, #00a8e8 100%);
+      border: none;
+      border-radius: 10px;
+      padding: 15px;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(0, 97, 242, 0.4);
+    }
+    .back-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .back-link a {
+      color: #0061f2;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+                <img src="images/csgr-ia-logo.png" alt="CSGR-IA Logo">
+        <h2>Espace Membre</h2>
+        <p>Connectez-vous pour accéder au tableau de bord</p>
+              </div>
+      <div class="login-body">
+                <form id="login-form">
+                  <div class="form-group">
+            <label for="login-username">
+              <i class="mdi mdi-account mr-2"></i>Email ou nom d'utilisateur
+                    </label>
+            <input type="text" class="form-control" id="login-username" placeholder="Entrez votre identifiant" required autofocus>
+                  </div>
+                  <div class="form-group">
+            <label for="login-password">
+              <i class="mdi mdi-lock mr-2"></i>Mot de passe
+                    </label>
+            <input type="password" class="form-control" id="login-password" placeholder="Entrez votre mot de passe" required>
+                  </div>
+          <button type="submit" class="btn btn-primary btn-login btn-block mt-4">
+                    <i class="mdi mdi-login mr-2"></i>Se connecter
+                  </button>
+                </form>
+                <div class="alert alert-info mt-4 mb-0">
+                  <i class="mdi mdi-information mr-2"></i>
+          <small>Contactez l'administrateur pour obtenir vos identifiants.</small>
+        </div>
+        <div class="back-link">
+          <a href="index.html">
+            <i class="mdi mdi-arrow-left mr-1"></i>Retour au site
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  
+  <script src="vendors/jquery/jquery.min.js"></script>
+  <script src="vendors/bootstrap/bootstrap.min.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/csgr-firebase.js"></script>
+  <script src="js/csgr-data.js"></script>
+  <script>
+    $(document).ready(async function() {
+      // Si déjà connecté, rediriger vers le dashboard
+      const savedUser = sessionStorage.getItem('member_user');
+      if (savedUser) {
+        window.location.href = 'dashboard.html';
+        return;
+      }
+
+      // Gestion de la connexion
+      $('#login-form').on('submit', async function(e) {
+        e.preventDefault();
+        
+        const username = $('#login-username').val().trim();
+        const password = $('#login-password').val();
+        
+        if (!username || !password) {
+          alert('Veuillez remplir tous les champs.');
+          return;
+        }
+
+        const btn = $(this).find('button[type="submit"]');
+        btn.prop('disabled', true).html('<i class="mdi mdi-loading mdi-spin mr-2"></i>Connexion...');
+
+        try {
+          // Initialiser Firebase si nécessaire
+          if (!window.CSGRFirebase || !window.CSGRFirebase.initialized) {
+            await window.CSGRFirebase.init();
+          }
+
+          // Récupérer les utilisateurs
+          const users = await CSGRData.getUsers();
+          
+          // Chercher l'utilisateur
+          const user = users.find(u => 
+            (u.username && u.username.toLowerCase() === username.toLowerCase()) || 
+            (u.email && u.email.toLowerCase() === username.toLowerCase())
+          );
+
+          if (!user) {
+            alert('Identifiant incorrect.');
+            btn.prop('disabled', false).html('<i class="mdi mdi-login mr-2"></i>Se connecter');
+            return;
+          }
+
+          if (user.password !== password) {
+            alert('Mot de passe incorrect.');
+            btn.prop('disabled', false).html('<i class="mdi mdi-login mr-2"></i>Se connecter');
+            return;
+          }
+
+          // Connexion réussie
+          sessionStorage.setItem('member_user', JSON.stringify(user));
+          window.location.href = 'dashboard.html';
+
+        } catch (error) {
+          console.error('Erreur de connexion:', error);
+          alert('Erreur de connexion. Veuillez réessayer.');
+          btn.prop('disabled', false).html('<i class="mdi mdi-login mr-2"></i>Se connecter');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

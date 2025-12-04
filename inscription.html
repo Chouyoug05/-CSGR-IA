@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>Inscription - CSGR-IA</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="css/style.min.css">
+  <link rel="stylesheet" href="css/csgr-custom.css">
+</head>
+<body class="inscription-page">
+  <header id="header-section">
+    <nav class="navbar navbar-expand-lg pl-3 pl-sm-0" id="navbar">
+      <div class="container">
+        <div class="navbar-brand-wrapper d-flex w-100">
+          <a href="index.html"><img src="images/csgr-ia-logo.png" alt="CSGR-IA Logo"></a>
+          <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+            <span class="mdi mdi-menu navbar-toggler-icon"></span>
+          </button> 
+        </div>
+        <div class="collapse navbar-collapse navbar-menu-wrapper" id="navbarSupportedContent">
+          <ul class="navbar-nav align-items-lg-center align-items-start ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Accueil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#programmes-section">Programmes</a>
+            </li>
+          </ul>
+        </div>
+      </div> 
+    </nav>   
+  </header>
+
+  <div class="content-wrapper">
+    <div class="container py-5">
+      <a href="index.html" class="btn btn-outline-secondary mb-4">
+        <i class="mdi mdi-arrow-left mr-2"></i>Retour
+      </a>
+      <div class="row align-items-center">
+        <!-- Image à gauche -->
+        <div class="col-12 col-lg-5 mb-4 mb-lg-0">
+          <div class="text-center">
+            <img src="images/groupe 1.svg" alt="Inscription CSGR-IA" class="img-fluid" style="max-height: 500px;">
+          </div>
+        </div>
+        
+        <!-- Formulaire à droite -->
+        <div class="col-12 col-lg-7">
+          <h2 class="mb-4">Formulaire d'inscription</h2>
+          <div id="programme-info" class="card mb-4 border-0 shadow-sm"></div>
+          <form id="inscription-form">
+            <div class="card border-0 shadow-lg">
+              <div class="card-body p-4">
+                <h5 class="mb-4">
+                  <i class="mdi mdi-account-circle mr-2 text-primary"></i>
+                  Informations personnelles
+                </h5>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="nom">
+                        <i class="mdi mdi-account mr-1"></i>Nom *
+                      </label>
+                      <input type="text" class="form-control form-control-lg" id="nom" placeholder="Votre nom" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="prenom">
+                        <i class="mdi mdi-account mr-1"></i>Prénom *
+                      </label>
+                      <input type="text" class="form-control form-control-lg" id="prenom" placeholder="Votre prénom" required>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="email">
+                        <i class="mdi mdi-email mr-1"></i>Email *
+                      </label>
+                      <input type="email" class="form-control form-control-lg" id="email" placeholder="votre@email.com" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="telephone">
+                        <i class="mdi mdi-phone mr-1"></i>Téléphone (Gabon) *
+                      </label>
+                      <input type="tel" class="form-control form-control-lg" id="telephone" placeholder="+241 06 12 34 56 78" pattern="^\+241[0-9]{9}$" required>
+                      <small class="form-text text-muted">Format: +241 suivi de 9 chiffres (ex: +241061234567)</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="adresse">
+                    <i class="mdi mdi-map-marker mr-1"></i>Adresse
+                  </label>
+                  <textarea class="form-control" id="adresse" rows="3" placeholder="Votre adresse complète"></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="commentaires">
+                    <i class="mdi mdi-comment-text mr-1"></i>Commentaires
+                  </label>
+                  <textarea class="form-control" id="commentaires" rows="3" placeholder="Des informations supplémentaires ?"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg btn-block mt-3">
+                  <i class="mdi mdi-arrow-right mr-2"></i>Continuer vers le paiement
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="border-top">
+    <p class="text-center text-muted pt-4">Copyright © 2025 <strong>CSGR-IA</strong>. Tous droits réservés.</p>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  
+  <script src="vendors/jquery/jquery.min.js"></script>
+  <script src="vendors/bootstrap/bootstrap.min.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/csgr-firebase.js"></script>
+  <script src="js/csgr-data.js"></script>
+  <script>
+    let programme = null;
+
+    $(document).ready(async function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const programmeId = urlParams.get('programme');
+      
+      if (programmeId) {
+        programme = await CSGRData.getProgramme(programmeId);
+        if (programme) {
+          displayProgrammeInfo(programme);
+        } else {
+          $('#programme-info').html('<div class="alert alert-danger">Programme non trouvé.</div>');
+        }
+      }
+
+      // Formatage automatique du numéro de téléphone gabonais
+      $('#telephone').on('input', function() {
+        let value = $(this).val().replace(/\s/g, '').replace(/[^0-9+]/g, '');
+        
+        // Si l'utilisateur tape directement un numéro sans +241
+        if (value.length > 0 && !value.startsWith('+')) {
+          // Si commence par 0, remplacer par +241
+          if (value.startsWith('0')) {
+            value = '+241' + value.substring(1);
+          }
+          // Si commence par 241, ajouter le +
+          else if (value.startsWith('241')) {
+            value = '+' + value;
+          }
+          // Sinon, ajouter +241 devant
+          else {
+            value = '+241' + value;
+          }
+        }
+        
+        // Si commence par +241, limiter à +241 suivi de 9 chiffres exactement
+        if (value.startsWith('+241')) {
+          const digits = value.substring(4).replace(/[^0-9]/g, '');
+          // Limiter à 9 chiffres après +241
+          if (digits.length > 9) {
+            value = '+241' + digits.substring(0, 9);
+          } else {
+            value = '+241' + digits;
+          }
+        }
+        
+        // Limiter la longueur totale à 13 caractères (+241 + 9 chiffres)
+        if (value.length > 13) {
+          value = value.substring(0, 13);
+        }
+        
+        $(this).val(value);
+      });
+
+      $('#inscription-form').on('submit', async function(e) {
+        e.preventDefault();
+        
+        // Valider le format du téléphone gabonais de manière stricte
+        const telephone = $('#telephone').val().trim();
+        
+        // Vérifier le format exact : +241 suivi de 9 chiffres
+        const phoneRegex = /^\+241[0-9]{9}$/;
+        if (!phoneRegex.test(telephone)) {
+          alert('Veuillez entrer un numéro de téléphone gabonais valide.\n\nFormat requis : +241 suivi de 9 chiffres\nExemple : +241061234567\n\nLe numéro doit commencer par +241 et contenir exactement 9 chiffres après.');
+          $('#telephone').focus();
+          $('#telephone').select();
+          return;
+        }
+        
+        // Vérifier que le numéro après +241 ne commence pas par 0 (les numéros gabonais commencent par 06, 07, etc.)
+        const digits = telephone.substring(4);
+        if (digits.length !== 9) {
+          alert('Le numéro de téléphone doit contenir exactement 9 chiffres après +241.\n\nExemple : +241061234567');
+          $('#telephone').focus();
+          $('#telephone').select();
+          return;
+        }
+        
+        // Vérifier que le premier chiffre est 0 ou 1 (format gabonais)
+        if (digits[0] !== '0' && digits[0] !== '1') {
+          alert('Le numéro de téléphone gabonais doit commencer par 0 ou 1 après +241.\n\nExemples valides :\n- +241061234567\n- +241071234567');
+          $('#telephone').focus();
+          $('#telephone').select();
+          return;
+        }
+        
+        const formData = {
+          programmeId: programme ? programme.id : null,
+          programmeNom: programme ? programme.nom : '',
+          nom: $('#nom').val(),
+          prenom: $('#prenom').val(),
+          email: $('#email').val(),
+          telephone: telephone,
+          adresse: $('#adresse').val(),
+          commentaires: $('#commentaires').val(),
+          prix: programme ? (programme.prix || 0) : 0
+        };
+        
+        // Sauvegarder dans sessionStorage pour la page de paiement
+        sessionStorage.setItem('inscription_data', JSON.stringify(formData));
+        
+        // Rediriger vers la page de paiement
+        window.location.href = 'paiement.html';
+      });
+    });
+
+    function displayProgrammeInfo(prog) {
+      const prix = prog.prix === 0 || prog.prix === '0' ? 'Gratuit' : prog.prix.toLocaleString('fr-FR') + ' XAF';
+      const html = `
+        <div class="card-body">
+          <h5>${prog.nom}</h5>
+          <p class="text-muted mb-2">${prog.descriptionCourte || ''}</p>
+          <p class="mb-0"><strong>Prix:</strong> ${prix}</p>
+        </div>
+      `;
+      $('#programme-info').html(html);
+    }
+  </script>
+</body>
+</html>
+

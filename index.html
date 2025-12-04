@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>CSGR-IA - Comité Gabonais de Formation en Intelligence Artificielle</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="vendors/owl-carousel/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="vendors/owl-carousel/css/owl.theme.default.css">
+  <link rel="stylesheet" href="vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="vendors/aos/css/aos.css">
+  <link rel="stylesheet" href="css/style.min.css">
+  <link rel="stylesheet" href="css/csgr-custom.css">
+</head>
+<body id="body" data-spy="scroll" data-target=".navbar" data-offset="100">
+  <header id="header-section">
+    <nav class="navbar navbar-expand-lg pl-3 pl-sm-0" id="navbar">
+    <div class="container">
+      <div class="navbar-brand-wrapper d-flex w-100">
+          <a href="index.html"><img src="images/csgr-ia-logo.png" alt="CSGR-IA Logo"></a>
+        <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="mdi mdi-menu navbar-toggler-icon"></span>
+        </button> 
+      </div>
+      <div class="collapse navbar-collapse navbar-menu-wrapper" id="navbarSupportedContent">
+        <ul class="navbar-nav align-items-lg-center align-items-start ml-auto">
+          <li class="d-flex align-items-center justify-content-between pl-4 pl-lg-0">
+            <div class="navbar-collapse-logo">
+                <img src="images/csgr-ia-logo.png" alt="CSGR-IA Logo">
+            </div>
+            <button class="navbar-toggler close-button" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="mdi mdi-close navbar-toggler-icon pl-5"></span>
+            </button>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="#header-section">Accueil</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="#programmes-section">Programmes</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="#actualites-section">Actualités</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="#feedback-section">Témoignages</a>
+          </li>
+          <li class="nav-item btn-contact-us pl-4 pl-lg-0">
+              <button class="btn btn-info" data-toggle="modal" data-target="#contactModal">Contact</button>
+          </li>
+        </ul>
+      </div>
+    </div> 
+    </nav>   
+  </header>
+  
+  <div class="banner">
+    <div class="container">
+      <h1 class="font-weight-semibold">Formation en Intelligence Artificielle<br>au Gabon</h1>
+      <h6 class="font-weight-normal text-muted pb-3">Découvrez nos programmes de formation en IA et développez vos compétences avec des experts.</h6>
+      <div>
+        <a href="#programmes-section" class="btn btn-opacity-light mr-1">Voir les programmes</a>
+        <a href="#programmes-section" class="btn btn-opacity-success ml-1">En savoir plus</a>
+      </div>
+      <img src="images/Group171.svg" alt="" class="img-fluid">
+    </div>
+  </div>
+  
+  <div class="content-wrapper">
+    <div class="container">
+      <!-- Section Statistiques -->
+      <section class="features-overview" id="statistiques-section">
+        <div class="content-header">
+          <h2>Nos statistiques</h2>
+          <h6 class="section-subtitle text-muted">Découvrez notre impact dans la formation en IA au Gabon</h6>
+        </div>
+        <div class="d-md-flex justify-content-between" id="statistiques-container">
+          <!-- Les statistiques seront chargées dynamiquement -->
+        </div>
+      </section>     
+      
+      <!-- Section Programmes -->
+      <section class="digital-marketing-service" id="programmes-section">
+        <div class="content-header text-center mb-5">
+          <h2>Nos Programmes de Formation</h2>
+          <h6 class="section-subtitle text-muted">Choisissez le programme qui correspond à vos besoins</h6>
+            </div>    
+        <div class="mb-4 text-center">
+          <button class="btn filter-btn active" data-category="all">Tous</button>
+          <button class="btn filter-btn" data-category="debutant">Débutant</button>
+          <button class="btn filter-btn" data-category="intermediaire">Intermédiaire</button>
+          <button class="btn filter-btn" data-category="avance">Avancé</button>
+        </div>
+        <div class="row" id="programmes-container">
+          <!-- Les programmes seront chargés dynamiquement -->
+        </div>
+      </section>     
+      
+      <!-- Section Actualités -->
+      <section class="digital-marketing-service" id="actualites-section">
+        <div class="content-header text-center mb-5">
+          <h2>Actualités</h2>
+          <h6 class="section-subtitle text-muted">Restez informé de nos dernières nouvelles et événements</h6>
+          </div>
+        <div class="row" id="actualites-container">
+          <!-- Les actualités seront chargées dynamiquement -->
+        </div>
+      </section>     
+      
+      <!-- Section Témoignages -->
+      <section class="customer-feedback" id="feedback-section">
+        <div class="row">
+          <div class="col-12 text-center pb-5">
+            <h2>Ce que disent nos participants</h2>
+            <h6 class="section-subtitle text-muted m-0">Découvrez les témoignages de nos anciens participants</h6>
+          </div>
+          <div class="owl-carousel owl-theme grid-margin" id="temoignages-container">
+            <!-- Les témoignages seront chargés dynamiquement -->
+          </div>
+        </div>
+      </section>
+      
+      <!-- Section CTA -->
+      <section class="contact-us" id="cta-section" style="display: none;">
+        <div class="contact-us-bgimage grid-margin">
+          <div class="pb-4">
+            <h4 class="px-3 px-md-0 m-0" data-aos="fade-down" id="cta-title">Prêt à commencer votre formation ?</h4>
+            <h4 class="pt-1" data-aos="fade-down" id="cta-subtitle">Inscrivez-vous dès maintenant</h4>
+          </div>
+          <div data-aos="fade-up">
+            <a href="#programmes-section" class="btn btn-rounded btn-outline-danger" id="cta-button">Voir les programmes</a>
+          </div>          
+        </div>
+      </section>
+      
+      <!-- Section Contact -->
+      <section class="contact-details" id="contact-section">
+        <div class="row text-center text-md-left">
+          <div class="col-12 col-md-6 col-lg-3 grid-margin">
+            <img src="images/csgr-ia-logo.png" alt="CSGR-IA Logo" class="pb-2">
+            <div class="pt-2">
+              <p class="text-muted m-0" id="contact-email">contact@csgr-ia.com</p>
+              <p class="text-muted m-0" id="contact-phone">+241 XX XX XX XX</p>
+            </div>         
+          </div>
+          <div class="col-12 col-md-6 col-lg-3 grid-margin">
+            <h5 class="pb-2">Restez informé</h5>
+            <p class="text-muted">Ne manquez aucune actualité de nos formations !</p>
+            <form id="newsletter-form">
+              <input type="email" class="form-control" id="newsletter-email" placeholder="Votre email" required>
+            </form>
+            <div class="pt-3">
+              <button type="submit" form="newsletter-form" class="btn btn-dark">S'abonner</button>
+            </div>   
+          </div>
+          <div class="col-12 col-md-6 col-lg-3 grid-margin">
+            <h5 class="pb-2">Informations</h5>
+            <p class="text-muted m-0 pb-2" id="contact-address">Libreville, Gabon</p>
+            <a href="#programmes-section"><p class="m-0 pt-1 pb-2">Programmes</p></a>   
+            <a href="#actualites-section"><p class="m-0 pt-1 pb-2">Actualités</p></a> 
+            <a href="#feedback-section"><p class="m-0 pt-1 pb-2">Témoignages</p></a>
+            <a href="membre.html"><p class="m-0 pt-1">Espace Membre</p></a>
+          </div>
+          <div class="col-12 col-md-6 col-lg-3 grid-margin">
+            <h5 class="pb-2">Suivez-nous</h5>
+            <p class="text-muted">Restez connecté avec nous sur les réseaux sociaux</p>
+              <div class="d-flex justify-content-center justify-content-md-start">
+                <a href="#"><span class="mdi mdi-facebook"></span></a>
+                <a href="#"><span class="mdi mdi-twitter"></span></a>
+                <a href="#"><span class="mdi mdi-instagram"></span></a>
+                <a href="#"><span class="mdi mdi-linkedin"></span></a>
+              </div>
+          </div>
+        </div>  
+      </section>
+      
+      <footer class="border-top">
+        <p class="text-center text-muted pt-4">Copyright © 2025 <strong>CSGR-IA</strong>. Tous droits réservés.</p>
+      </footer>
+    </div> 
+  </div>
+  
+  <!-- Modal de Contact -->
+  <div class="modal fade" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="contactModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+          <h4 class="modal-title" id="contactModalLabel">Contactez-nous</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+            </div>
+            <div class="modal-body">
+          <form id="contact-modal-form">
+                <div class="form-group">
+              <label for="contact-name">Nom</label>
+              <input type="text" class="form-control" id="contact-name" placeholder="Votre nom" required>
+                </div>
+                <div class="form-group">
+              <label for="contact-email-modal">Email</label>
+              <input type="email" class="form-control" id="contact-email-modal" placeholder="votre@email.com" required>
+                </div>
+                <div class="form-group">
+              <label for="contact-message">Message</label>
+              <textarea class="form-control" id="contact-message" rows="5" placeholder="Votre message" required></textarea>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-dismiss="modal">Fermer</button>
+          <button type="button" class="btn btn-success" id="send-contact-btn">Envoyer</button>
+        </div>
+      </div>
+            </div>
+          </div>
+  
+  <!-- Modal de promotion (compact et moderne) -->
+  <div class="modal fade" id="promotionModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 380px;">
+      <div class="modal-content" style="border: none; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.25);">
+        <div class="modal-header py-2 px-3" style="background: linear-gradient(135deg, #0061f2 0%, #00a8e8 100%); border: none;">
+          <h6 class="modal-title mb-0 text-white" style="font-weight: 600;">
+            <i class="mdi mdi-star mr-1"></i>Offre Spéciale
+          </h6>
+          <button type="button" class="close text-white" data-dismiss="modal" style="opacity: 1; font-size: 20px;">
+            <span>&times;</span>
+          </button>
+        </div>
+        <div class="modal-body p-3" id="promotion-content" style="background: white;">
+          <p class="text-center text-muted">Chargement...</p>
+        </div>
+        <div class="modal-footer py-2 px-3" style="border: none; background: #f8fafc; justify-content: center; gap: 10px;">
+          <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal">Plus tard</button>
+          <a href="#" id="promotion-link" class="btn btn-sm" style="background: linear-gradient(135deg, #0061f2 0%, #00a8e8 100%); color: white; border: none; padding: 8px 20px; font-weight: 600; border-radius: 20px;">
+            S'inscrire <i class="mdi mdi-arrow-right ml-1"></i>
+          </a>
+        </div>
+      </div>
+    </div> 
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  
+  <script src="vendors/jquery/jquery.min.js"></script>
+  <script src="vendors/bootstrap/bootstrap.min.js"></script>
+  <script src="vendors/owl-carousel/js/owl.carousel.min.js"></script>
+  <script src="vendors/aos/js/aos.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/csgr-firebase.js"></script>
+  <script src="js/csgr-data.js"></script>
+  <script src="js/csgr-main.js"></script>
+  <script src="js/landingpage.js"></script>
+  <script>
+    // Gérer l'affichage de la popup après inscription
+    $(document).ready(function() {
+      // Vérifier si on vient d'une inscription réussie (via URL ou sessionStorage)
+      const urlParams = new URLSearchParams(window.location.search);
+      const fromInscription = urlParams.get('inscrit') === '1' || sessionStorage.getItem('inscription_success') === 'true';
+      
+      // Si on vient d'une inscription, réinitialiser le cooldown pour permettre l'affichage
+      if (fromInscription) {
+        localStorage.removeItem('popup_last_shown');
+        sessionStorage.removeItem('popup_last_shown');
+        sessionStorage.removeItem('inscription_success');
+        // Nettoyer l'URL
+        if (urlParams.get('inscrit') === '1') {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+        console.log('✅ Cooldown popup réinitialisé après inscription');
+      }
+    });
+  </script>
+</body>
+</html>

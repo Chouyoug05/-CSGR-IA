@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>Détails du Programme - CSGR-IA</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="vendors/aos/css/aos.css">
+  <link rel="stylesheet" href="css/style.min.css">
+  <link rel="stylesheet" href="css/csgr-custom.css">
+</head>
+<body>
+  <header id="header-section">
+    <nav class="navbar navbar-expand-lg pl-3 pl-sm-0" id="navbar">
+      <div class="container">
+        <div class="navbar-brand-wrapper d-flex w-100">
+          <a href="index.html"><img src="images/csgr-ia-logo.png" alt="CSGR-IA Logo"></a>
+          <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+            <span class="mdi mdi-menu navbar-toggler-icon"></span>
+          </button> 
+        </div>
+        <div class="collapse navbar-collapse navbar-menu-wrapper" id="navbarSupportedContent">
+          <ul class="navbar-nav align-items-lg-center align-items-start ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Accueil</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#programmes-section">Programmes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#actualites-section">Actualités</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html#contact-section">Contact</a>
+            </li>
+          </ul>
+        </div>
+      </div> 
+    </nav>   
+  </header>
+
+  <div class="content-wrapper">
+    <div class="container py-5">
+      <a href="index.html#programmes-section" class="btn btn-outline-secondary mb-4">
+        <i class="mdi mdi-arrow-left mr-2"></i>Retour aux programmes
+      </a>
+      <div id="programme-details">
+        <div class="text-center">
+          <p class="text-muted">Chargement...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="border-top">
+    <p class="text-center text-muted pt-4">Copyright © 2025 <strong>CSGR-IA</strong>. Tous droits réservés.</p>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  
+  <script src="vendors/jquery/jquery.min.js"></script>
+  <script src="vendors/bootstrap/bootstrap.min.js"></script>
+  <script src="vendors/aos/js/aos.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/csgr-firebase.js"></script>
+  <script src="js/csgr-data.js"></script>
+  <script>
+    $(document).ready(async function() {
+      try {
+        console.log('📚 [PROGRAMME] Début du chargement des détails du programme...');
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const programmeId = urlParams.get('id');
+        
+        if (!programmeId) {
+          $('#programme-details').html('<div class="alert alert-danger">Aucun programme spécifié.</div>');
+          return;
+        }
+        
+        console.log('📚 [PROGRAMME] ID du programme:', programmeId);
+        
+        // Vérifier que Firebase est initialisé
+        if (!window.CSGRFirebase || !window.CSGRFirebase.initialized) {
+          console.log('🔄 Firebase non initialisé, initialisation...');
+          if (window.CSGRFirebase) {
+            await window.CSGRFirebase.init();
+          } else {
+            console.error('❌ CSGRFirebase n\'est pas disponible');
+            $('#programme-details').html('<div class="alert alert-danger">Erreur: Firebase n\'est pas chargé. Rafraîchissez la page.</div>');
+            return;
+          }
+        }
+        
+        console.log('📚 [PROGRAMME] Récupération du programme depuis Firebase...');
+        const programme = await CSGRData.getProgramme(programmeId);
+        console.log('📚 [PROGRAMME] Programme reçu:', programme);
+        
+        if (programme) {
+          displayProgramme(programme);
+          console.log('✅ [PROGRAMME] Programme affiché avec succès');
+        } else {
+          console.warn('⚠️ [PROGRAMME] Programme non trouvé');
+          $('#programme-details').html('<div class="alert alert-danger">Programme non trouvé.</div>');
+        }
+      } catch (error) {
+        console.error('❌ [PROGRAMME] Erreur lors du chargement:', error);
+        $('#programme-details').html(`<div class="alert alert-danger">
+          <strong>Erreur lors du chargement du programme</strong><br>
+          ${error.message || 'Erreur inconnue'}<br>
+          <small>Vérifiez la console (F12) pour plus de détails.</small>
+        </div>`);
+      }
+    });
+
+    function displayProgramme(programme) {
+      const prix = programme.prix === 0 || programme.prix === '0' ? 'Gratuit' : programme.prix.toLocaleString('fr-FR') + ' XAF';
+      const html = `
+        <div class="row">
+          <div class="col-12 col-md-8">
+            <div class="mb-4">
+              <div class="d-flex align-items-center mb-3">
+                <i class="mdi ${programme.icone || 'mdi-book'} mr-3" style="font-size: 48px; color: ${programme.couleur || '#007bff'};"></i>
+                <h1>${programme.nom}</h1>
+              </div>
+              <p class="lead">${programme.descriptionCourte || ''}</p>
+            </div>
+            <div class="card mb-4">
+              <div class="card-body">
+                <h3>Description</h3>
+                <p>${programme.descriptionLongue || programme.descriptionCourte || 'Aucune description disponible.'}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="card">
+              <div class="card-body">
+                <h5>Informations</h5>
+                <ul class="list-unstyled">
+                  <li class="mb-3">
+                    <i class="mdi mdi-calendar mr-2"></i>
+                    <strong>Date de début:</strong><br>
+                    ${formatDate(programme.dateDebut)}
+                  </li>
+                  <li class="mb-3">
+                    <i class="mdi mdi-clock-outline mr-2"></i>
+                    <strong>Durée:</strong><br>
+                    ${programme.duree || 'N/A'}
+                  </li>
+                  <li class="mb-3">
+                    <i class="mdi mdi-map-marker mr-2"></i>
+                    <strong>Lieu:</strong><br>
+                    ${programme.lieu || 'N/A'}
+                  </li>
+                  <li class="mb-3">
+                    <i class="mdi mdi-tag mr-2"></i>
+                    <strong>Prix:</strong><br>
+                    <span class="h4 text-primary">${prix}</span>
+                  </li>
+                  <li class="mb-3">
+                    <i class="mdi mdi-folder-outline mr-2"></i>
+                    <strong>Catégorie:</strong><br>
+                    ${programme.categorie || 'N/A'}
+                  </li>
+                </ul>
+                <a href="inscription.html?programme=${programme.id}" class="btn btn-primary btn-block btn-lg">S'inscrire maintenant</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      $('#programme-details').html(html);
+    }
+
+    function formatDate(dateValue) {
+      if (!dateValue) return 'N/A';
+      
+      let date;
+      
+      // Si c'est un Timestamp Firebase
+      if (dateValue && typeof dateValue.toDate === 'function') {
+        date = dateValue.toDate();
+      } else if (dateValue && dateValue.seconds) {
+        date = new Date(dateValue.seconds * 1000);
+      } else if (dateValue instanceof Date) {
+        date = dateValue;
+      } else {
+        date = new Date(dateValue);
+      }
+      
+      if (isNaN(date.getTime())) return 'N/A';
+      
+      return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+  </script>
+</body>
+</html>
+

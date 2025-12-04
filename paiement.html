@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <title>Paiement - CSGR-IA</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="css/style.min.css">
+  <link rel="stylesheet" href="css/csgr-custom.css">
+</head>
+<body>
+  <header id="header-section">
+    <nav class="navbar navbar-expand-lg pl-3 pl-sm-0" id="navbar">
+      <div class="container">
+        <div class="navbar-brand-wrapper d-flex w-100">
+          <a href="index.html"><img src="images/csgr-ia-logo.png" alt="CSGR-IA Logo"></a>
+        </div>
+      </div> 
+    </nav>   
+  </header>
+
+  <div class="content-wrapper">
+    <div class="container py-5">
+      <a href="inscription.html" class="btn btn-outline-secondary mb-4">
+        <i class="mdi mdi-arrow-left mr-2"></i>Retour
+      </a>
+      <div class="row align-items-center">
+        <!-- Image à gauche -->
+        <div class="col-12 col-lg-5 mb-4 mb-lg-0">
+          <div class="text-center">
+            <img src="images/Group171.svg" alt="Paiement sécurisé CSGR-IA" class="img-fluid" style="max-height: 500px;">
+          </div>
+        </div>
+        
+        <!-- Formulaire de paiement à droite -->
+        <div class="col-12 col-lg-7">
+          <h2 class="mb-4">
+            <i class="mdi mdi-credit-card mr-2 text-primary"></i>Paiement sécurisé
+          </h2>
+          <div id="paiement-content">
+            <div class="text-center">
+              <p class="text-muted">Chargement...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="border-top">
+    <p class="text-center text-muted pt-4">Copyright © 2025 <strong>CSGR-IA</strong>. Tous droits réservés.</p>
+  </footer>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  
+  <script src="vendors/jquery/jquery.min.js"></script>
+  <script src="vendors/bootstrap/bootstrap.min.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/csgr-firebase.js"></script>
+  <script src="js/csgr-data.js"></script>
+  <script>
+    $(document).ready(async function() {
+      const inscriptionData = JSON.parse(sessionStorage.getItem('inscription_data') || '{}');
+      
+      if (!inscriptionData.nom) {
+        window.location.href = 'inscription.html';
+        return;
+      }
+
+      const prix = inscriptionData.prix || 0;
+      const isGratuit = prix === 0 || prix === '0';
+
+      if (isGratuit) {
+        // Inscription gratuite - pas besoin de paiement
+        await processGratuit(inscriptionData);
+      } else {
+        // Afficher le formulaire de paiement
+        displayPaiement(inscriptionData, prix);
+      }
+    });
+
+    function displayPaiement(data, prix) {
+      const html = `
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-body p-4">
+            <h5 class="mb-3">
+              <i class="mdi mdi-receipt mr-2 text-primary"></i>Récapitulatif
+            </h5>
+            <div class="mb-3">
+              <p class="mb-2"><strong>Programme:</strong> ${data.programmeNom || 'N/A'}</p>
+              <p class="mb-2"><strong>Participant:</strong> ${data.prenom} ${data.nom}</p>
+              <p class="mb-0"><strong>Email:</strong> ${data.email}</p>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Total:</h5>
+              <h3 class="text-primary mb-0">${prix === 0 || prix === '0' ? 'Gratuit' : prix.toLocaleString('fr-FR') + ' XAF'}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card border-0 shadow-lg">
+          <div class="card-body p-4">
+            <h5 class="mb-4">
+              <i class="mdi mdi-lock mr-2 text-primary"></i>Mode de paiement
+            </h5>
+            <form id="paiement-form">
+              <!-- Sélection du mode de paiement -->
+              <div class="form-group">
+                <label class="font-weight-bold">Choisissez votre mode de paiement *</label>
+                <div class="mt-3">
+                  <div class="custom-control custom-radio mb-3">
+                    <input type="radio" id="mode-airtel" name="mode-paiement" value="airtel" class="custom-control-input" checked>
+                    <label class="custom-control-label" for="mode-airtel">
+                      <i class="mdi mdi-cellphone mr-2" style="color: #e60000;"></i>Airtel Money
+                    </label>
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input type="radio" id="mode-moov" name="mode-paiement" value="moov" class="custom-control-input">
+                    <label class="custom-control-label" for="mode-moov">
+                      <i class="mdi mdi-cellphone mr-2" style="color: #00a859;"></i>Moov Money
+                    </label>
+                  </div>
+                  <div class="custom-control custom-radio mb-3">
+                    <input type="radio" id="mode-admin" name="mode-paiement" value="admin" class="custom-control-input">
+                    <label class="custom-control-label" for="mode-admin">
+                      <i class="mdi mdi-account-check mr-2" style="color: #6c757d;"></i>Paiement validé par l'admin
+                    </label>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Formulaire Mobile Money -->
+              <div id="form-mobile">
+                <hr class="my-4">
+                <h6 class="mb-3" id="mobile-title">Informations Mobile Money</h6>
+                <div class="alert alert-info mb-4">
+                  <i class="mdi mdi-information mr-2"></i>
+                  <strong>Instructions :</strong> Effectuez le dépôt sur le numéro indiqué ci-dessous, puis téléchargez une capture d'écran ou une photo de la confirmation de paiement.
+                </div>
+                <div class="form-group">
+                  <label class="font-weight-bold">
+                    <i class="mdi mdi-cellphone mr-1"></i>Numéro de téléphone pour le dépôt *
+                  </label>
+                  <div class="card bg-light p-3 mb-3">
+                    <p class="mb-0" id="numero-depot">
+                      <strong id="numero-display">Chargement...</strong>
+                    </p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="numero-mobile">
+                    <i class="mdi mdi-cellphone mr-1"></i>Votre numéro de téléphone *
+                  </label>
+                  <input type="tel" class="form-control form-control-lg" id="numero-mobile" placeholder="+241 06 12 34 56 78">
+                </div>
+                <div class="form-group">
+                  <label for="code-transaction">
+                    <i class="mdi mdi-barcode mr-1"></i>Code de transaction *
+                  </label>
+                  <input type="text" class="form-control form-control-lg" id="code-transaction" placeholder="Entrez le code de transaction reçu">
+                  <small class="form-text text-muted">Le code reçu par SMS après le dépôt</small>
+                </div>
+                <div class="form-group">
+                  <label for="preuve-paiement">
+                    <i class="mdi mdi-camera mr-1"></i>Preuve de paiement (Image) *
+                  </label>
+                  <input type="file" class="form-control-file" id="preuve-paiement" accept="image/*" required>
+                  <small class="form-text text-muted">Téléchargez une capture d'écran ou une photo de la confirmation de paiement</small>
+                  <div id="preview-image" class="mt-2" style="display: none;">
+                    <img id="preview-img" src="" alt="Aperçu" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid #ddd;">
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Message pour paiement admin -->
+              <div id="form-admin" style="display: none;">
+                <hr class="my-4">
+                <div class="alert alert-warning">
+                  <i class="mdi mdi-information mr-2"></i>
+                  <strong>Paiement par validation admin</strong><br>
+                  Votre inscription sera enregistrée et l'administrateur validera le paiement manuellement. Vous recevrez une confirmation par email une fois la validation effectuée.
+                </div>
+              </div>
+              
+              <div class="alert alert-info d-flex align-items-center mt-4">
+                <i class="mdi mdi-information mr-2"></i>
+                <small>Ceci est une démonstration. Aucun paiement réel ne sera effectué.</small>
+              </div>
+              <button type="submit" class="btn btn-primary btn-lg btn-block mt-3">
+                <i class="mdi mdi-lock mr-2"></i>Confirmer le paiement de ${prix === 0 || prix === '0' ? 'Gratuit' : prix.toLocaleString('fr-FR') + ' XAF'}
+              </button>
+            </form>
+          </div>
+        </div>
+      `;
+      $('#paiement-content').html(html);
+      
+      // Numéros de téléphone pour les dépôts
+      const numerosDepot = {
+        'airtel': '+241 06 12 34 56 78',
+        'moov': '+241 05 12 34 56 78'
+      };
+      
+      // Initialiser avec Airtel Money par défaut
+      $('#mobile-title').text('Informations Airtel Money');
+      $('#numero-display').text(numerosDepot['airtel']);
+      $('#numero-mobile, #code-transaction, #preuve-paiement').attr('required', 'required');
+      
+      // Gestion du changement de mode de paiement
+      $('input[name="mode-paiement"]').on('change', function() {
+        const mode = $(this).val();
+        $('#form-mobile, #form-admin').hide();
+        $('#numero-mobile, #code-transaction, #preuve-paiement').removeAttr('required');
+        
+        if (mode === 'airtel' || mode === 'moov') {
+          $('#form-mobile').show();
+          const titles = {
+            'airtel': 'Informations Airtel Money',
+            'moov': 'Informations Moov Money'
+          };
+          $('#mobile-title').text(titles[mode]);
+          $('#numero-display').text(numerosDepot[mode]);
+          $('#numero-mobile, #code-transaction, #preuve-paiement').attr('required', 'required');
+        } else if (mode === 'admin') {
+          $('#form-admin').show();
+        }
+      });
+      
+      // Prévisualisation de l'image
+      $(document).on('change', '#preuve-paiement', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            $('#preview-img').attr('src', e.target.result);
+            $('#preview-image').show();
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+      
+      // Formatage automatique du numéro de carte
+      $(document).on('input', '#numero-carte', function() {
+        let value = $(this).val().replace(/\s/g, '');
+        let formatted = value.match(/.{1,4}/g)?.join(' ') || value;
+        $(this).val(formatted);
+      });
+      
+      // Formatage de la date d'expiration
+      $(document).on('input', '#date-expiration', function() {
+        let value = $(this).val().replace(/\D/g, '');
+        if (value.length >= 2) {
+          value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        }
+        $(this).val(value);
+      });
+
+      $('#paiement-form').on('submit', async function(e) {
+        e.preventDefault();
+        const modePaiement = $('input[name="mode-paiement"]:checked').val();
+        let statut = 'en_attente';
+        
+        if (modePaiement === 'admin') {
+          statut = 'en_attente'; // En attente de validation admin
+        } else if (modePaiement === 'airtel' || modePaiement === 'moov') {
+          statut = 'en_attente'; // En attente de validation par l'admin après vérification de la preuve
+        }
+        
+        data.modePaiement = modePaiement;
+        if (modePaiement === 'airtel' || modePaiement === 'moov') {
+          data.numeroMobile = $('#numero-mobile').val();
+          data.codeTransaction = $('#code-transaction').val();
+          
+          // Sauvegarder l'image de preuve de paiement
+          const fileInput = $('#preuve-paiement')[0];
+          if (fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+              data.preuvePaiementImage = e.target.result; // Base64
+              data.preuvePaiementFileName = file.name;
+              await processPaiement(data, statut);
+            };
+            reader.readAsDataURL(file);
+          } else {
+            await processPaiement(data, statut);
+          }
+        } else {
+          await processPaiement(data, statut);
+        }
+      });
+    }
+
+    async function processGratuit(data) {
+      try {
+        const inscription = await CSGRData.saveInscription(data);
+        sessionStorage.removeItem('inscription_data');
+        if (inscription && inscription.id) {
+          window.location.href = `confirmation.html?id=${inscription.id}`;
+        } else {
+          alert('✅ Inscription enregistrée avec succès !');
+          sessionStorage.setItem('inscription_success', 'true');
+          window.location.href = 'index.html?inscrit=1';
+        }
+      } catch (error) {
+        console.error('❌ Erreur lors de l\'enregistrement:', error);
+        alert('❌ Erreur lors de l\'enregistrement. Veuillez réessayer.');
+      }
+    }
+
+    async function processPaiement(data, statut) {
+      try {
+        data.statutPaiement = statut;
+        const inscription = await CSGRData.saveInscription(data);
+        sessionStorage.removeItem('inscription_data');
+        if (inscription && inscription.id) {
+          window.location.href = `confirmation.html?id=${inscription.id}`;
+        } else {
+          alert('✅ Inscription enregistrée avec succès !');
+          sessionStorage.setItem('inscription_success', 'true');
+          window.location.href = 'index.html?inscrit=1';
+        }
+      } catch (error) {
+        console.error('❌ Erreur lors de l\'enregistrement:', error);
+        alert('❌ Erreur lors de l\'enregistrement. Veuillez réessayer.');
+      }
+    }
+  </script>
+</body>
+</html>
+
